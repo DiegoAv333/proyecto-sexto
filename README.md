@@ -102,4 +102,5 @@ Elegimos colores suaves para no generar sobrecarga visual. La información está
 [Inscripcion_de_materias_PROTOTIPO.pdf](https://github.com/user-attachments/files/20581786/Inscripcion_de_materias_PROTOTIPO.pdf)
 
 #Prototipo de navegacion:
-[Mapa Conceptual de Sitio Web Moderno Negro y Verde.pdf](https://github.com/user-attachments/files/20581793/Mapa.Conceptual.de.Sitio.Web.Moderno.Negro.y.Verde.pdf)
+[Mapa de navegacion Prototipo.pdf](https://github.com/user-attachments/files/20599876/Mapa.de.navegacion.Prototipo.pdf)
+
