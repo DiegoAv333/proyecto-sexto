@@ -1,5 +1,5 @@
 import Login from './Login';
-import '../style/PageLogin.css'; 
+import '../style/PageLogin.css';
 import Header from './Header';
 
 function PageLogin() {
@@ -14,7 +14,7 @@ function PageLogin() {
     else {
       alert('Usuario o contraseña incorrectos.');
     }
-    // Aquí iría la llamada a la API de autenticación
+    // Acá iría la llamada a la API de autenticación
   };
 
   return (
@@ -22,9 +22,9 @@ function PageLogin() {
       <Header />
       <h1>Bienvenido</h1>
       <div className='formulario'>
-          <Login
-            onLoginSubmit={handleLogin}
-          />
+        <Login
+          onLoginSubmit={handleLogin}
+        />
       </div>
     </div>
   );

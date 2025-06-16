@@ -1,0 +1,33 @@
+.navigate-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.navigate-header h2 {
+    font-size: 1.5rem;
+    color: #343a40;
+    margin: 0;
+}
+
+.navigate-header .nav-links {
+    list-style-type: none;
+    display: flex;
+    gap: 15px;
+    text-decoration: none;
+}
+
+.navigate-header .nav-links a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1rem;
+}
+
+.navigate-header .nav-links a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+    transition: color 0.5s ease;
+}
