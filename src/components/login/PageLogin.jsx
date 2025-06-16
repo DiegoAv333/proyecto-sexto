@@ -1,6 +1,5 @@
 import Login from './Login';
 import './PageLogin.css';
-import Header from './Header';
 
 function PageLogin() {
   const handleLogin = (user, pass) => {
@@ -19,7 +18,6 @@ function PageLogin() {
 
   return (
     <div className='page-login'>
-      <Header />
       <h1>Bienvenido</h1>
       <div className='formulario'>
         <Login

@@ -1,22 +1,26 @@
-//import logo from './logo.svg';
-import './App.css';
 import React from 'react';
-import FooterP from './components/footerPage/FooterP';
-import HeaderP from './components/header/HeaderP';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import './App.css';
+import HeaderP from "./components//header/HeaderP";
+import FooterP from "./components/footerPage/FooterP";
 import Home from './components/home/Home';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './components/login/Login';
+import PageLogin from './components/login/PageLogin';
 
 function App() {
   return (
     <Router>
     <div className="App">
-      <HeaderP />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-      <FooterP />
+      <HeaderP></HeaderP>
+      <div className="App-main">
+        <div className="App-main-text">
+            <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<PageLogin />} />
+            </Routes>
+        </div>
+      </div>
+      <FooterP></FooterP>
     </div>
     </Router>
   );
