@@ -7,8 +7,9 @@ import Home from './components/home/Home';
 import PageLogin from './components/login/PageLogin';
 
 function App() {
+  const repositoryName = process.env.PUBLIC_URL ? new URL(process.env.PUBLIC_URL).pathname : '/';
   return (
-    <Router>
+    <Router basename={repositoryName}>
     <div className="App">
       <HeaderP></HeaderP>
       <div className="App-main">
