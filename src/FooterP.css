@@ -1,0 +1,10 @@
+.footer-main{
+    background-color: #1f2937;
+    color: #8a919e;
+}
+
+.footer-derechos{
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+}
