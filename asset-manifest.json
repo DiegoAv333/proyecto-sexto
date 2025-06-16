@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/proyecto-sexto/static/css/main.8cabad54.css",
-    "main.js": "/proyecto-sexto/static/js/main.8a942026.js",
+    "main.js": "/proyecto-sexto/static/js/main.687681cd.js",
     "index.html": "/proyecto-sexto/index.html",
     "main.8cabad54.css.map": "/proyecto-sexto/static/css/main.8cabad54.css.map",
-    "main.8a942026.js.map": "/proyecto-sexto/static/js/main.8a942026.js.map"
+    "main.687681cd.js.map": "/proyecto-sexto/static/js/main.687681cd.js.map"
   },
   "entrypoints": [
     "static/css/main.8cabad54.css",
-    "static/js/main.8a942026.js"
+    "static/js/main.687681cd.js"
   ]
 }
