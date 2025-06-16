@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import  "../style/FooterP.css";
+import  "./FooterP.css";
 
 function FooterP(){
     return(

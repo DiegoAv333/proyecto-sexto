@@ -1,5 +1,5 @@
 import Login from './Login';
-import '../style/PageLogin.css';
+import './PageLogin.css';
 import Header from './Header';
 
 function PageLogin() {
