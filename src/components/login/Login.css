@@ -15,7 +15,7 @@
 
 .login-form input[type="text"],
 .login-form input[type="password"] {
-    width: 90%;
+    width: 92%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -24,7 +24,7 @@
 }
 
 .login-form button[type="submit"] {
-    width: 95%;
+    width: 100%;
     padding: 10px;
     background-color: #007bff;
     color: white;
@@ -35,7 +35,10 @@
 }
 
 .login-form button[type="submit"]:hover {
-    background-color: #0056b3;
+    transition: 0.4s ease-in-out;
+    color:#333;
+    border: #0056b3 0.5px solid;
+    background-color: #fef;
 }
 
 .login-form .error {

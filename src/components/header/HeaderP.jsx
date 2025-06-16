@@ -1,5 +1,6 @@
 import React from "react";
 import NavigateHeader from "./NavigateHeader";
+
 function Header() {
   return (
     <div className="header-container">
