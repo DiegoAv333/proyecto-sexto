@@ -9,7 +9,7 @@ function Home() {
             <h1>Bienvenido a <span>
                 Inscribete YA
                 </span>
-                </h1>
+            </h1>
             <p>Inscribirse a una materia nunca fue tan facil</p>
         </div>
         <div className="home-main-link">
