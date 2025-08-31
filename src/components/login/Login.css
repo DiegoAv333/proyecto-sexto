@@ -14,13 +14,15 @@
 }
 
 .login-form input[type="text"],
-.login-form input[type="password"] {
+.login-form input[type="password"]
+.login-form input[type="email"] {
     width: 92%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
+    display: block;
 }
 
 .login-form button[type="submit"] {
@@ -61,4 +63,18 @@
 .register-option a {
     color: #007bff;
     text-decoration: none;
+}
+/* Botón con estilo de enlace para accesibilidad */
+.linklike {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.linklike:hover {
+    text-decoration: underline;
 }
