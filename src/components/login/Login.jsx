@@ -1,48 +1,113 @@
-import React, { useState } from 'react';
-import './Login.css';
+import form from "../styles/Form.module.css";
+import anim from "../styles/animations.module.css";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-function Login({onLoginSubmit}) {
-  // Estado interno para los inputs de este formulario
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+export default function Login() {
+  const { login } = useAuth();
+  const [err, setErr] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    onLoginSubmit(username, password);
-    // limpia los campos después de enviar el login
-    setUsername('');
-    setPassword('');
+    setErr("");
+
+    const data = new FormData(e.currentTarget);
+    const email = data.get("email")?.toString().trim();
+    const password = data.get("password")?.toString();
+
+    if (!email || !password) {
+      setErr("Por favor completá todos los campos");
+      return;
+    }
+
+    try {
+      login(email, password);
+      navigate("/dashboard");
+    } catch (error) {
+      setErr(error.message || "No se pudo iniciar sesión");
+    }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className='login-form'>
-      <h2>Iniciar Sesión</h2>
-        <div>
-          <label htmlFor="loginUsername">Username:</label>
-          <input
-            type="text"
-            id="loginUsername"
-            value={username} // <-- El valor proviene del estado interno
-            onChange={(e) => setUsername(e.target.value)} // <-- Actualiza el estado interno
-            required
-          />
+    <section className={`${anim.fadeIn} px-4`} aria-labelledby="login-title">
+      <div className="min-h-[80vh] grid place-items-center">
+        <div className="max-w-md w-full">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-strong-blue rounded-xl grid place-items-center mx-auto mb-4">
+              <span className="text-white font-bold text-xl">E</span>
+            </div>
+            <h1 id="login-title" className="text-3xl font-bold text-dark-gray">Iniciar sesión</h1>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-lg p-8">
+            <form onSubmit={onSubmit} noValidate aria-describedby={err ? "login-error" : undefined}>
+              <div className="space-y-4">
+                <div className={form.field}>
+                  <label htmlFor="login-email" className={form.label}>Email</label>
+                  <input
+                    id="login-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    className={form.input}
+                    placeholder="tu@email.com"
+                  />
+                </div>
+
+                <div className={form.field}>
+                  <label htmlFor="login-password" className={form.label}>Contraseña</label>
+                  <input
+                    id="login-password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    className={form.input}
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+
+              <div
+                role="alert"
+                id="login-error"
+                aria-live="assertive"
+                className={`${form.error} ${err ? "" : "hidden"}`}
+              >
+                {err}
+              </div>
+
+              <button
+                type="submit"
+                className="w-full mt-6 bg-strong-blue text-white py-3 px-6 rounded-xl font-medium hover:bg-blue-700"
+              >
+                Ingresar
+              </button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-gray-600">
+                ¿No tenés cuenta?{" "}
+                <button
+                  onClick={() => navigate("/register")}
+                  className="text-strong-blue hover:underline font-medium"
+                >
+                  Registrate
+                </button>
+              </p>
+              <button
+                onClick={() => navigate("/")}
+                className="mt-2 text-gray-500 hover:text-dark-gray"
+              >
+                ← Volver al inicio
+              </button>
+            </div>
+          </div>
         </div>
-        <div>
-          <label htmlFor="loginPassword">Password:</label>
-          <input
-            type="password"
-            id="loginPassword"
-            value={password} // <-- El valor proviene del estado interno
-            onChange={(e) => setPassword(e.target.value)} // <-- Actualiza el estado interno
-            required
-          />
-        </div>
-        <button type="submit">Ingresar</button>
-        <p className='register-option'>¿No tienes una cuenta? <a href="#">Regístrate aquí</a></p>
-      </form>
-    </div>
+      </div>
+    </section>
   );
 }
-
-export default Login;
