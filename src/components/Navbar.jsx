@@ -76,7 +76,6 @@ export default function Navbar() {
                 </button>
             </li>
             </ul>
-
           {/* Menú móvil */}
             <details className="md:hidden">
             <summary
@@ -128,4 +127,5 @@ export default function Navbar() {
         </div>
     </nav>
     );
+
 }
