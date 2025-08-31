@@ -1,5 +1,5 @@
 import styles from "../styles/Navbar.module.css";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "./context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Navbar() {

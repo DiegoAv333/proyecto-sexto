@@ -1,7 +1,7 @@
-import anim from "../styles/animations.module.css";
+import anim from "../../styles/animations.module.css";
 import { useEnrollment } from "../context/EnrollmentContext";
-import Toast from "./Toast";
-import ConfirmDialog from "./ConfirmDialog";
+import Toast from "../Toast";
+import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

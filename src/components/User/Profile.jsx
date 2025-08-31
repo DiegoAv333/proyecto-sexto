@@ -1,5 +1,5 @@
-import form from "../styles/Form.module.css";
-import anim from "../styles/animations.module.css";
+import form from "../../styles/Form.module.css";
+import anim from "../../styles/animations.module.css";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";

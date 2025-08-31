@@ -1,7 +1,7 @@
 import form from "../styles/Form.module.css";
 import anim from "../styles/animations.module.css";
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "./context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {

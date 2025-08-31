@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "./AuthContext";
-import { getEnrolled as storageGet, setEnrolled as storageSet } from "../utils/storage";
+import { getEnrolled as storageGet, setEnrolled as storageSet } from "../../utils/storage";
 
 const EnrollmentContext = createContext();
 

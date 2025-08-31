@@ -1,4 +1,4 @@
-import anim from "../styles/animations.module.css";
+import anim from "../../styles/animations.module.css";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 

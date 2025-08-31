@@ -1,7 +1,7 @@
-import anim from "../styles/animations.module.css";
+import anim from "../../styles/animations.module.css";
 import { useEnrollment } from "../context/EnrollmentContext";
-import Toast from "./Toast";
-import SubjectCard from "./SubjectCard";
+import Toast from "../Toast";
+import SubjectCard from "../SubjectCard";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./components/Home";
-import Login from "./components/Login";
+import Home from "./components/home/Home";
+import Login from "./components/login/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/User/Dashboard";
-import Enrollment from "./components/Enrollment";
-import EnrolledSubjects from "./components/EnrolledSubjects";
+import Enrollment from "./components/Enrollment/Enrollment";
+import EnrolledSubjects from "./components/Enrollment/EnrolledSubjects";
 import Profile from "./components/User/Profile";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import { EnrollmentProvider } from "./context/EnrollmentContext";
+import { AuthProvider, useAuth } from "./components/context/AuthContext";
+import { EnrollmentProvider } from "./components/context/EnrollmentContext";
 import ProtectedRoute from "./routes/ProtectedRoute"; 
 
 /** Shell privado: provee EnrollmentProvider una sola vez para todas las privadas */

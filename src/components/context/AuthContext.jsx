@@ -6,7 +6,7 @@ import {
     setCurrentUser,
     clearCurrentUser,
     getEnrolled,
-} from "../utils/storage";
+} from "../../utils/storage";
 
 const AuthContext = createContext();
 
