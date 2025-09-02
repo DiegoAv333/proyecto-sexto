@@ -19,12 +19,12 @@ export default function Navbar() {
             <button
             onClick={() => navigate("/dashboard")}
             className="flex items-center space-x-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-strong-blue rounded-md"
-            aria-label="Ir al Dashboard"
+            aria-label="Ir al inicio"
             >
-            <div className="w-8 h-8 bg-strong-blue rounded-lg grid place-items-center">
-                <span className="text-white font-bold text-sm">E</span>
-            </div>
-            <span className="font-bold text-dark-gray text-xl">EduEnroll</span>
+            <svg class="h-8 w-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            <span className="font-bold text-dark-gray text-xl">Inscribite YA</span>
             </button>
 
           {/* Menú desktop */}
@@ -45,7 +45,7 @@ export default function Navbar() {
                     }`
                 }
                 >
-                Dashboard
+                Inicio
                 </NavLink>
             </li>
             <li role="none">
