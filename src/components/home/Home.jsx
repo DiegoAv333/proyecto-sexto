@@ -8,15 +8,15 @@ export default function Home() {
     <section className={anim.fadeIn} aria-labelledby="home-title">
       <div className="min-h-[80vh] flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center">
-          <div className="mb-8">
-            <div className="w-20 h-20 bg-strong-blue rounded-2xl grid place-items-center mx-auto mb-4">
-              <span className="text-white font-bold text-2xl">E</span>
-            </div>
+          <div className="mb-8 grid place-items-center mx-a4uto mb-4">
+            <svg class="h-8 w-8 text-blue-600 " fill="currentColor" viewBox="0 0 24 24" >
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
             <h1
               id="home-title"
               className="text-4xl font-bold text-dark-gray mb-2"
             >
-              EduEnroll
+              Inscribite YA
             </h1>
             <p className="text-gray-600 text-lg">
               Sistema de Inscripciones Estudiantiles
