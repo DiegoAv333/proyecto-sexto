@@ -45,7 +45,7 @@ export default function Navbar() {
                     }`
                 }
                 >
-                Dashboard
+                Inicio
                 </NavLink>
             </li>
             <li role="none">
