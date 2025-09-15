@@ -18,4 +18,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// Opcional: Inicializar Analytics si es necesario
+try {
+  getAnalytics(app);
+} catch (e) {
+  // Opcional: manejar el error o ignorar en desarrollo
+}
