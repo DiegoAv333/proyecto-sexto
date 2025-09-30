@@ -27,7 +27,7 @@ export default function Enrollment() {
           onClick={() => navigate("/dashboard")}
           className="text-strong-blue hover:underline mb-4"
         >
-          ← Volver al Dashboard
+          ← Volver al inicio
         </button>
         <h1
           id="enrollment-title"

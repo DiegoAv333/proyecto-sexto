@@ -14,7 +14,17 @@ export default function Login() {
     const email = data.get("email")?.toString().trim();
     const password = data.get("password")?.toString();
 
-    if (!email || !password) return setErr("Completá email y contraseña");
+    if (!email || !password){
+      return setErr("Completá email y contraseña");
+    } 
+    const emailRegex = /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return serErr("El email no tiene un formato válido")
+    }
+    if(password.length < 6){
+      return setErr("La contraseña debe tener al menos 6 caracteres");
+    }
+    
     try {
       login(email, password);
       navigate("/dashboard");

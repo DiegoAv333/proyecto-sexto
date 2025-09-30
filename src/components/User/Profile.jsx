@@ -60,7 +60,7 @@ export default function Profile() {
           onClick={() => navigate("/dashboard")}
           className="text-strong-blue hover:underline mb-4"
         >
-          ← Volver al Dashboard
+          ← Volver al inicio
         </button>
         <h1 id="profile-title" className="text-3xl font-bold text-dark-gray mb-2">
           Mi Perfil

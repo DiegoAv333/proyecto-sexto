@@ -9,7 +9,7 @@ export default function Dashboard() {
   return (
     <section className={`max-w-6xl mx-auto px-4 py-8 ${anim.fadeIn}`}>
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-dark-gray mb-2">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-dark-gray mb-2">Inicio</h1>
         <p className="text-gray-600 text-lg">¡Bienvenido de vuelta, {user?.name}!</p>
       </header>
 
