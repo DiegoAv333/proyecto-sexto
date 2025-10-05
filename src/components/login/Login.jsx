@@ -10,17 +10,23 @@ export default function Login() {
   const onSubmit = (e) => {
     e.preventDefault();
     setErr("");
+
+
     const data = new FormData(e.currentTarget);
     const email = data.get("email")?.toString().trim();
     const password = data.get("password")?.toString();
 
+  /*validacion de email*/
+  
     if (!email || !password){
       return setErr("Completá email y contraseña");
     } 
+
     const emailRegex = /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/;
     if (!emailRegex.test(email)) {
-      return serErr("El email no tiene un formato válido")
+      return setErr("El email no tiene un formato válido");
     }
+    
     if(password.length < 6){
       return setErr("La contraseña debe tener al menos 6 caracteres");
     }
