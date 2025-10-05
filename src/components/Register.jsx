@@ -5,11 +5,11 @@ import { useAuth } from "./context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-    const { register } = useAuth();
-    const [err, setErr] = useState("");
-    const navigate = useNavigate();
+  const { register } = useAuth();
+  const [err, setErr] = useState("");
+  const navigate = useNavigate();
 
-    const onSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     setErr("");
 
