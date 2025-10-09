@@ -1,93 +1,134 @@
+// src/components/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { auth, db } from "../../firebase/config";
 import {
-    getUsers,
-    setUsers,
-    getCurrentUser,
-    setCurrentUser,
-    clearCurrentUser,
-    getEnrolled,
-} from "../../utils/storage";
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    updateProfile as fbUpdateProfile,
+} from "firebase/auth";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getEnrolled } from "../../utils/storage";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(() => getCurrentUser());
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-  // (Opcional) sembrar usuarios de prueba si no hay ninguno
+  // Escucha cambios de sesión (login/logout)
     useEffect(() => {
-    const users = getUsers();
-    if (users.length === 0) {
-        const seed = [
-        { name: "Admin", email: "admin@gmail.com", password: "123456", role: "backend" },
-        ];
-        setUsers(seed);
-    }
-    setLoading(false);
+        const unsub = onAuthStateChanged(auth, async (fbUser) => {
+            if (!fbUser) {
+                setUser(null);
+                setLoading(false);
+                return;
+        }
+
+      // Trae perfil desde Firestore
+        const ref = doc(db, "users", fbUser.uid);
+        const snap = await getDoc(ref);
+        const profile = snap.exists() ? snap.data() : {};
+
+    setUser({
+        uid: fbUser.uid,
+        email: fbUser.email,
+        name: profile.name || fbUser.displayName || "",
+        role: profile.role || "frontend",
+        dni: profile.dni || "",
+        address: profile.address || "",
+        phone: profile.phone || "",
+        photoURL: fbUser.photoURL || profile.photoURL || null,
+    });
+
+        setLoading(false);
+    });
+
+    return () => unsub();
     }, []);
 
-    const login = (email, password) => {
-    const users = getUsers();
-    const found = users.find((u) => u.email === email && u.password === password);
-    if (!found) throw new Error("Email o contraseña incorrectos");
-    setUser(found);
-    setCurrentUser(found);
-    return found;
+  // Registro con Email/Password
+    const register = async (name, email, password) => {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const uid = cred.user.uid;
+
+    // Crea documento en Firestore
+    await setDoc(doc(db, "users", uid), {
+        name,
+        email,
+        role: "frontend",
+        dni: "",
+        address: "",
+        phone: "",
+        createdAt: new Date(),
+    });
+
+    await fbUpdateProfile(cred.user, { displayName: name });
+    return cred.user;
     };
 
-    const register = (name, email, password) => {
-        const users = getUsers();
-        if (users.find(u => u.email === email)) throw new Error("Ya existe una cuenta con este email");
-
-  // Nuevo usuario con rol y campos extra inicializados vacíos
-        const newUser = { 
-            name, 
-            email, 
-            password, 
-            role: "frontend", 
-            dni: "", 
-            address: "", 
-            phone: "" 
-        };
-
-    users.push(newUser);
-    setUsers(users);
-    setUser(newUser);
-    setCurrentUser(newUser);
-    return newUser;
-};
-
-
-    const updateProfile = ({ name, email, password, dni, address, phone }) => {
-        const users = getUsers();
-        const idx = users.findIndex(u => u.email === user.email);
-        if (idx === -1) return;
-        const updated = {
-        ...users[idx],    // conserva role y otros
-            name,
-            email,
-            dni,
-        address,
-        phone,
-        ...(password ? { password } : {}),
-    };
-    users[idx] = updated;
-    setUsers(users);
-    setUser(updated);
-    setCurrentUser(updated);
-};
-
-    const logout = () => {
-    setUser(null);
-    clearCurrentUser();
+  // Login con Email/Password
+    const login = async (email, password) => {
+    await signInWithEmailAndPassword(auth, email, password);
     };
 
+  // Login con Google
+    const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    // Si es la primera vez, crea documento en Firestore
+    const ref = doc(db, "users", user.uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+        await setDoc(ref, {
+        name: user.displayName || "",
+        email: user.email,
+        role: "frontend",
+        dni: "",
+        address: "",
+        phone: "",
+        photoURL: user.photoURL || "",
+        createdAt: new Date(),
+        });
+    }
+    };
+
+  // Actualiza perfil (solo Firestore)
+    const updateProfile = async (patch) => {
+        if (!user?.uid) return;
+        const ref = doc(db, "users", user.uid);
+        await updateDoc(ref, patch);
+        setUser((prev) => ({ ...prev, ...patch }));
+    };
+
+  //  Logout
+    const logout = async () => {
+        await signOut(auth);
+        setUser(null);
+    };
+
+  // Contador de materias (local temporalmente)
     const enrolledCount = useMemo(
-    () => (user ? getEnrolled(user.email).length : 0),
+    () => (user?.email ? getEnrolled(user.email).length : 0),
     [user]
     );
 
-    const value = { user, loading, login, register, updateProfile, logout, enrolledCount };
+    const value = {
+        user,
+        loading,
+        register,
+        login,
+        loginWithGoogle,
+        logout,
+        updateProfile,
+        enrolledCount,
+    };
+
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
