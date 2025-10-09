@@ -2,7 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
+
 
 
 const firebaseConfig = {
@@ -26,3 +27,7 @@ try {
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+enableIndexedDbPersistence(db).catch((e) => {
+  console.warn("No se pudo habilitar persistencia:", e.code || e.message);
+});
