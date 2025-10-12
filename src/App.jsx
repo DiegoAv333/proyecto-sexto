@@ -6,6 +6,7 @@ import Register from "./components/Register";
 import Dashboard from "./components/User/Dashboard";
 import Enrollment from "./components/Enrollment/Enrollment";
 import EnrolledSubjects from "./components/Enrollment/EnrolledSubjects";
+import Detalle from "./components/Enrollment/Detalle";
 import Profile from "./components/User/Profile";
 import { AuthProvider, useAuth } from "./components/context/AuthContext";
 import { EnrollmentProvider } from "./components/context/EnrollmentContext";
