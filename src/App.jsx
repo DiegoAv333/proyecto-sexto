@@ -24,7 +24,7 @@ function PrivateShell() {
 /** Envoltorio principal: muestra Navbar solo con sesión */
 function Shell() {
   const { user, loading } = useAuth();
-  if (loading) return null;
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <>
@@ -49,6 +49,7 @@ function Shell() {
           <Route element={<PrivateShell />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/enrollment" element={<Enrollment />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/enrolled" element={<EnrolledSubjects />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
