@@ -6,6 +6,7 @@ import Register from "./components/Register";
 import Dashboard from "./components/User/Dashboard";
 import Enrollment from "./components/Enrollment/Enrollment";
 import EnrolledSubjects from "./components/Enrollment/EnrolledSubjects";
+import Detalle from "./components/Enrollment/Detalle";
 import Profile from "./components/User/Profile";
 import { AuthProvider, useAuth } from "./components/context/AuthContext";
 import { EnrollmentProvider } from "./components/context/EnrollmentContext";
@@ -23,7 +24,7 @@ function PrivateShell() {
 /** Envoltorio principal: muestra Navbar solo con sesión */
 function Shell() {
   const { user, loading } = useAuth();
-  if (loading) return null;
+  if (loading) return <p>Cargando...</p>;
 
   return (
     <>
@@ -48,6 +49,7 @@ function Shell() {
           <Route element={<PrivateShell />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/enrollment" element={<Enrollment />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/enrolled" element={<EnrolledSubjects />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
