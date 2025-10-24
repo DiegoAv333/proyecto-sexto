@@ -122,4 +122,66 @@ export default App;
     </div>
   </div>
 </section>
+/
+<section className="py-16 bg-gray-50" id="materias">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center">
+      <h2 className="text-3xl font-bold text-gray-800">Materias Disponibles</h2>
+      <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+        Explora nuestra amplia oferta académica.
+      </p>
+    </div>
 
+    <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <CourseCard
+        category="Ciencias"
+        code="MAT101"
+        title="Cálculo Diferencial"
+        description="Fundamentos del cálculo, límites, derivadas y aplicaciones."
+        schedule="Lunes y Miércoles"
+      />
+      <CourseCard
+        category="Humanidades"
+        code="LIT205"
+        title="Literatura Contemporánea"
+        description="Análisis de obras literarias del siglo XX y XXI."
+        schedule="Martes y Jueves"
+      />
+      <CourseCard
+        category="Tecnología"
+        code="CS150"
+        title="Programación Avanzada"
+        description="Estructuras de datos, algoritmos y paradigmas de programación."
+        schedule="Lunes, Miércoles y Viernes"
+      />
+    </div>
+  </div>
+</section>
+/
+<section className="py-16 bg-gradient-to-r from-blue-800 to-blue-600">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 className="text-3xl font-bold text-white">¿Listo para inscribirte?</h2>
+    <p className="mt-4 text-lg text-blue-100">
+      No pierdas tiempo y asegura tu lugar.
+    </p>
+    <div className="mt-8 flex justify-center">
+      <button className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-md text-lg font-medium shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+        Comenzar ahora
+      </button>
+    </div>
+  </div>
+</section>
+/
+<footer className="bg-gray-800 text-white py-12" id="masInfo">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      {/* Columna logo + descripción */}
+      {/* Enlaces rápidos */}
+      {/* Soporte */}
+      {/* Legal */}
+    </div>
+    <div className="mt-12 pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
+      <p>&copy; 2025 inscribeteYA. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
