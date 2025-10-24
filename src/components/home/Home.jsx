@@ -106,3 +106,20 @@ export default App;
     </div>
   </div>
 </section>
+/
+<section className="py-16 bg-white">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center">
+      <h2 className="text-3xl font-bold text-gray-800">
+        ¿Qué es inscribete<span className="text-blue-600">YA</span>?
+      </h2>
+      <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+        Una plataforma diseñada para simplificar el proceso de inscripción académica.
+      </p>
+    </div>
+    <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+      {/* Aquí van las tarjetas de beneficios */}
+    </div>
+  </div>
+</section>
+
