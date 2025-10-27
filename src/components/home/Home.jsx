@@ -116,9 +116,12 @@ function App() {
                 Tu plataforma académica para inscripciones rápidas y eficientes.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row sm:space-x-4">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-base font-medium shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+                <Link
+                  to="/login"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-base font-medium shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+                >
                   Inscribirme ahora
-                </button>
+                </Link>
               </div>
             </div>
             <div className="mt-10 lg:mt-0 lg:w-1/2">
