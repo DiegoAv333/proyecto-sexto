@@ -1,67 +1,64 @@
-/* src/styles/Form.module.css */
-/* CSS plano (sin @apply) para que siempre funcione,
-   incluso si @tailwindcss/forms resetea estilos. */
-
+/* Form.module.css */
 :root {
   --color-light-blue: #E6F3FF;
   --color-strong-blue: #1E40AF;
   --color-dark-gray:  #374151;
 }
 
-/* Contenedor de cada campo: label arriba, input abajo */
+
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;            /* ≈ space-y-1 */
+  gap: 0.25rem;
 }
 
-/* Etiqueta del campo */
+
 .label {
-  display: block;          /* fuerza que quede en su propia línea */
+  display: block;  
     color: var(--color-dark-gray, #374151);
-  font-weight: 600;        /* ≈ font-medium */
+  font-weight: 600; 
 }
 
-/* Input base */
+/* Input */
 .input {
-    display: block;
-    width: 100%;
-  padding: 0.75rem 1rem;              /* py-3 px-4 */
-  background: #fff;                   /* bg-white */
-  color: #111827;                     /* text-gray-900 */
-  border: 1px solid #D1D5DB;          /* border-gray-300 */
-  border-radius: 0.75rem;             /* rounded-xl */
-    line-height: 1.25rem;
-    -webkit-appearance: none;
-    appearance: none;
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;              
+  background: #fff;                  
+  color: #111827;                    
+  border: 1px solid #a4a9b0;         
+  border-radius: 0.75rem;             
+  line-height: 1.25rem;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-/* Placeholders */
-.input::placeholder { color: #9CA3AF; } /* placeholder-gray-400 */
 
-/* Focus ring “azul” */
+.input::placeholder { color: #9CA3AF; }
+
+
 .input:focus {
   outline: none;
   border-color: transparent;
-  box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2); /* strong-blue con ~20% alpha */
+  box-shadow: 0 0 0 2px rgba(30, 64, 175, 0.2);
 }
 
-/* Deshabilitado */
+
 .input:disabled { opacity: .6; cursor: not-allowed; }
 
-/* Textos de ayuda y error */
-.help  { font-size: 0.875rem; color: #6B7280; } /* text-sm text-gray-500 */
+
+.help  { font-size: 0.875rem; color: #6B7280; } 
 .error {
     margin-top: .5rem;
     padding: .75rem;
-  background: #FEE2E2;                /* red-100 */
-  border: 1px solid #FCA5A5;          /* red-300 */
-  color: #991B1B;                     /* red-700 */
+  background: #FEE2E2;                
+  border: 1px solid #f99393;          
+  color: #991B1B;                     
     border-radius: .75rem;
     font-size: .875rem;
 }
 
-/* Asegura que selects/textarea no traigan adornos raros del plugin */
+
 .input[type="email"],
 .input[type="text"],
 .input[type="password"],

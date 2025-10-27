@@ -3,11 +3,13 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const [err, setErr] = useState("");
+  const [submitting, setSubmitting] = useState(false);//deshabilitar botón mientras envía
 
-  const onSubmit = (e) => {
+
+  const onSubmit = async(e) => {
     e.preventDefault();
     setErr("");
 
@@ -32,16 +34,42 @@ export default function Login() {
     }
     
     try {
-      login(email, password);
+      setSubmitting(true);
+      await login(email, password);
       navigate("/dashboard");
     } catch (error) {
-      setErr(error.message || "No se pudo iniciar sesión");
+      console.error("Auth error (email):", error.code, error.message);
+      setErr(
+        error.code || "auth/operation-not-allowed"
+          ? "Este método de inicio de sesión no está habilitado en Firebase."
+          : error.message || "No se pudo inciar sesión"
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const onGoogle = async () => {
+    setErr("");
+    try {
+      setSubmitting(true);
+      await loginWithGoogle();
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Auth error (email):", error.code, error.message);
+      setErr(
+        error.code || "auth/operation-not-allowed"
+          ? "Este método de inicio de sesión no está habilitado en Firebase."
+          : error.message || "No se pudo inciar sesión"
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <section className="px-4">
-       <div className="min-h-[80vh] grid place-items-center">
+        <div className="min-h-[80vh] grid place-items-center">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
           <h1 className="text-2xl font-bold text-dark-gray mb-6 text-center">
             Iniciar sesión
@@ -83,6 +111,19 @@ export default function Login() {
             <button type="submit"
                     className="w-full mt-6 bg-strong-blue text-white py-3 px-6 rounded-xl font-medium hover:bg-blue-700">
               Ingresar
+            </button>
+            <button
+              type="button"
+              onClick={onGoogle}
+              disabled={submitting}
+              className="w-full mt-3 flex items-center justify-center gap-2 border border-gray-300 rounded-xl py-3 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              <img
+                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
+              Iniciar sesión con Google
             </button>
           </form>
 

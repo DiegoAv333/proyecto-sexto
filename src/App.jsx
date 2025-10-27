@@ -56,6 +56,7 @@ function Shell() {
           <Route element={<PrivateShell />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/enrollment" element={<Enrollment />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/enrolled" element={<EnrolledSubjects />} />
             <Route path="/materia/:id" element={<Detalle />} />
             <Route path="/profile" element={<Profile />} />

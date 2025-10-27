@@ -8,12 +8,13 @@ export default function Register() {
   const { register } = useAuth();
   const [err, setErr] = useState("");
   const navigate = useNavigate();
+  const [submitting, setSubmitting] = useState(false);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+   const onSubmit = async (evt) => {
+    evt.preventDefault();
     setErr("");
 
-    const d = new FormData(e.currentTarget);
+    const d = new FormData(evt.currentTarget);
     const name = d.get("name")?.toString().trim();
     const email = d.get("email")?.toString().trim();
     const password = d.get("password")?.toString();
@@ -43,10 +44,18 @@ export default function Register() {
     }
 
     try {
-      register(name, email, password);
+      setSubmitting(true);
+      await register(name, email, password); // <- Firebase Auth + Firestore
       navigate("/dashboard");
-    } catch (error) {
-      setErr(error.message || "No se pudo crear la cuenta");
+    } catch (errObj) {
+      console.error("Auth error (register):", errObj.code, errObj.message);
+      setErr(
+        errObj.code === "auth/operation-not-allowed"
+          ? "El registro por email no está habilitado en Firebase."
+          : errObj.message || "No se pudo registrar"
+      );
+    } finally {
+      setSubmitting(false);
     }
   };
 
