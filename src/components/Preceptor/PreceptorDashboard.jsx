@@ -54,6 +54,20 @@ export default function PreceptorDashboard() {
           </div>
           <p className="text-gray-600">{alumnos.length} alumnos registrados</p>
         </button>
+
+        {/* Mensajes */}
+        <button
+          onClick={() => navigate("/preceptor/comunicacion")}
+          className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow text-left"
+        >
+          <div className="flex items-center mb-4">
+            <div className="w-12 h-12 bg-purple-100 rounded-xl grid place-items-center mr-4">
+              💬
+            </div>
+            <h3 className="text-xl font-semibold text-dark-gray">Mensajes</h3>
+          </div>
+          <p className="text-gray-600">{mensajes.length} mensajes nuevos</p>
+        </button>
         
     </section>
     );
