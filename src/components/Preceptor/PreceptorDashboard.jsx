@@ -26,6 +26,20 @@ export default function PreceptorDashboard() {
           </div>
           <p className="text-gray-600">{materias.length} materias registradas</p>
         </button>
+
+        {/* Calendario */}
+        <button
+          onClick={() => navigate("/preceptor/calendario")}
+          className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow text-left"
+        >
+          <div className="flex items-center mb-4">
+            <div className="w-12 h-12 bg-green-100 rounded-xl grid place-items-center mr-4">
+              📅
+            </div>
+            <h3 className="text-xl font-semibold text-dark-gray">Calendario</h3>
+          </div>
+          <p className="text-gray-600">Visualizá días y horarios de mesas</p>
+        </button>
         
     </section>
     );
