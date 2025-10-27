@@ -64,10 +64,17 @@ export default function CalendarioPreceptor() {
         </button>
       </form>
 
+      <ul className="space-y-3">
+        {mensajes.map((m) => (
+          <li key={m.id} className="border p-3 rounded bg-white shadow-sm">
+            {m.texto}
+          </li>
+        ))}
+      </ul>
+
       {mensajes.length === 0 && (
         <p className="mt-4 text-gray-500">No hay eventos programados.</p>
       )}
     </section>
   );
 }
-
