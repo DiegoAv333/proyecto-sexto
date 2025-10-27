@@ -39,3 +39,25 @@
 39             Enviar Mensaje
 40           </button>
 41         </form>
+42         <ul className="space-y-2">
+43           {mensajes.map((m) => (
+44             <li
+45               key={m.id}
+46               className="border p-3 rounded flex justify-between items-center bg-gray-50"
+47             >
+48               <span>
+49                 <strong>{m.remitente}:</strong> {m.texto}
+50               </span>
+51               <button
+52                 onClick={() => eliminarMensaje(m.id)}
+53                 className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition"
+54               >
+55                 Eliminar
+56               </button>
+57             </li>
+58           ))}
+59         </ul>
+60       </section>
+61     );
+62   }
+
