@@ -4,6 +4,8 @@ import { usePreceptor } from "../context/PreceptorContext";
 
 
 export default function PreceptorDashboard() {
+  const navigate = useNavigate();
+  const { materias = [], alumnos = [], mensajes = [] } = usePreceptor();
     return(
     <section className={`max-w-6xl mx-auto px-4 py-8 ${anim.fadeIn}`}>
         <header className="mb-8">
