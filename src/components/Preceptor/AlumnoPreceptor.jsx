@@ -1,9 +1,24 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePreceptor } from "../context/PreceptorContext";
 
 export default function AlumnosPreceptor() {
   const { alumnos, eliminarAlumno } = usePreceptor();
+  const [nuevoAlumno, setNuevoAlumno] = useState({ nombre: "", email: "" });
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNuevoAlumno({ ...nuevoAlumno, [name]: value });
+  };
+   const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!nuevoAlumno.nombre || !nuevoAlumno.email)
+      return alert("Completa todos los campos");
+
+    agregarAlumno({ id: Date.now(), ...nuevoAlumno });
+    setNuevoAlumno({ nombre: "", email: "" });
+  };
 
 return (
     <section className="max-w-4xl mx-auto px-4 py-8" aria-labelledby="mysubj-title">
@@ -17,6 +32,33 @@ return (
         </button>
       </header>
       <h2 className="text-2xl font-bold text-dark-gray">Lista de Alumnos</h2>
+
+<form onSubmit={handleSubmit} className="mb-6 bg-gray-100 p-4 rounded">
+        <div className="grid md:grid-cols-2 gap-4">
+          <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre del alumno"
+            value={nuevoAlumno.nombre}
+            onChange={handleChange}
+            className="p-2 border rounded"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email del alumno"
+            value={nuevoAlumno.email}
+            onChange={handleChange}
+            className="p-2 border rounded"
+          />
+        </div>
+        <button
+          type="submit"
+          className="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+        >
+          Agregar Alumno
+        </button>
+</form>
 
     <table className="w-full border-collapse">
         <thead>
