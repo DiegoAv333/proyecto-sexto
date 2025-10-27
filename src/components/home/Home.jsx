@@ -1,5 +1,6 @@
 import React from 'react';
 import './Home.css';
+import { Link } from 'react-router-dom';
 
 // Componente para las tarjetas de materias
 const CourseCard = ({ category, code, title, description, schedule }) => (
@@ -40,6 +41,13 @@ const CourseCard = ({ category, code, title, description, schedule }) => (
 );
 
 function App() {
+  const handleScroll = (e, id) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <div className="bg-gray-50">
       {/* NAVBAR */}
@@ -64,29 +72,32 @@ function App() {
 
             <div className="flex items-center">
               <div className="hidden md:ml-6 md:flex md:space-x-8">
-                <a
-                  href="#"
+                <button
+                  onClick={(e) => handleScroll(e, 'hero')}
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium"
                 >
                   Inicio
-                </a>
-                <a
-                  href="#materias"
+                </button>
+                <button
+                  onClick={(e) => handleScroll(e, 'materias')}
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium"
                 >
                   Materias
-                </a>
-                <a
-                  href="#masInfo"
+                </button>
+                <button
+                  onClick={(e) => handleScroll(e, 'masInfo')}
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium"
                 >
                   Más Info
-                </a>
+                </button>
               </div>
               <div className="ml-6">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out transform hover:scale-105">
+                <Link
+                  to="/login"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300 ease-in-out transform hover:scale-105"
+                >
                   Iniciar sesión
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -94,7 +105,7 @@ function App() {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="hero-pattern py-16 md:py-24">
+      <section className="hero-pattern py-16 md:py-24" id="hero">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="lg:w-1/2">
