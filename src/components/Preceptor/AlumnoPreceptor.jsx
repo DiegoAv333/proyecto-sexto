@@ -85,6 +85,11 @@ return (
           ))}
         </tbody>
       </table>
+
+      {alumnos.length === 0 && (
+        <p className="mt-4 text-gray-500">No hay alumnos registrados.</p>
+      )}
+
     </section>
   );
 }
