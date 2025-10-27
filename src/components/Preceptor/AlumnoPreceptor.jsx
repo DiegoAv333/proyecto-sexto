@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { usePreceptor } from "../context/PreceptorContext";
 
 export default function AlumnosPreceptor() {
-  const { alumnos, eliminarAlumno } = usePreceptor();
+  const { alumnos, eliminarAlumno, agregarAlumno } = usePreceptor();
   const [nuevoAlumno, setNuevoAlumno] = useState({ nombre: "", email: "" });
   const navigate = useNavigate();
 
@@ -13,11 +13,11 @@ export default function AlumnosPreceptor() {
   };
    const handleSubmit = (e) => {
     e.preventDefault();
-    if (!nuevoAlumno.nombre || !nuevoAlumno.email)
+    if ((!nuevoAlumno.nombre) || (!nuevoAlumno.email))
       return alert("Completa todos los campos");
 
-    agregarAlumno({ id: Date.now(), ...nuevoAlumno });
-    setNuevoAlumno({ nombre: "", email: "" });
+      agregarAlumno({ id: Date.now(), ...nuevoAlumno });
+      setNuevoAlumno({ nombre: "", email: "" });
   };
 
 return (

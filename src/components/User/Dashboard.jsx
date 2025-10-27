@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import { useEnrollment } from "../context/EnrollmentContext";
 import { usePreceptor } from "../context/PreceptorContext";
 import { useNavigate } from "react-router-dom";
-import { useMemo } from "react";
 
 export default function Dashboard() {
   const { user } = useAuth();
