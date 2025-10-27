@@ -1,108 +1,109 @@
+// src/components/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-    getUsers,
-    setUsers,
-    getCurrentUser,
-    setCurrentUser,
-    clearCurrentUser,
-    getEnrolled,
+  getUsers,
+  setUsers,
+  getCurrentUser,
+  setCurrentUser,
+  clearCurrentUser,
+  getEnrolled,
 } from "../../utils/storage";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(() => getCurrentUser());
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate(); //redirecciones automaticas
+  const [user, setUser] = useState(() => getCurrentUser());
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // (Opcional) sembrar usuarios de prueba si no hay ninguno
-    useEffect(() => {
-    const users = getUsers();
-    if (users.length === 0) {
-        const seed = [
-        { name: "Admin", email: "admin@gmail.com", password: "123456", role: "backend" },
-        ];
-        setUsers(seed);
-    }
+  // Seed de usuarios de prueba: siempre asegura que existan
+  useEffect(() => {
+    const users = getUsers() || [];
+    const seed = [
+      { name: "Admin", email: "admin@gmail.com", password: "123456", role: "backend" },
+      { name: "Alumno", email: "alumno1@gmail.com", password: "alumno123", role: "frontend" },
+      { name: "Preceptor", email: "preceptor1@gmail.com", password: "prece123", role: "preceptor" },
+    ];
+
+    seed.forEach((u) => {
+      if (!users.find((x) => x.email === u.email)) users.push(u);
+    });
+
+    setUsers(users);
     setLoading(false);
-    }, []);
+  }, []);
 
-    //funcion del login
-    const login = (email, password) => {
-    const users = getUsers();
+  // Función de login
+  const login = (email, password) => {
+    const users = getUsers() || [];
     const found = users.find((u) => u.email === email && u.password === password);
     if (!found) throw new Error("Email o contraseña incorrectos");
-    
+
     setUser(found);
     setCurrentUser(found);
-
-    //Redirigir al home o dashboard según necesidad
     navigate("/dashboard");
     return found;
+  };
+
+  // Función de registro
+  const register = (name, email, password) => {
+    const users = getUsers() || [];
+    if (users.find((u) => u.email === email)) throw new Error("Ya existe una cuenta con este email");
+
+    const newUser = {
+      name,
+      email,
+      password,
+      role: "frontend",
+      dni: "",
+      address: "",
+      phone: "",
     };
-
-    //funcion del register
-    const register = (name, email, password) => {
-        const users = getUsers();
-        if (users.find(u => u.email === email)) throw new Error("Ya existe una cuenta con este email");
-
-  // Nuevo usuario con rol y campos extra inicializados vacíos
-        const newUser = { 
-            name, 
-            email, 
-            password, 
-            role: "frontend", 
-            dni: "", 
-            address: "", 
-            phone: "" 
-        };
 
     users.push(newUser);
     setUsers(users);
     setUser(newUser);
     setCurrentUser(newUser);
-
-    //redirigir después de registrar
     navigate("/dashboard");
     return newUser;
-};
+  };
 
+  // Función para actualizar perfil
+  const updateProfile = ({ name, email, password, dni, address, phone }) => {
+    const users = getUsers() || [];
+    const idx = users.findIndex((u) => u.email === user.email);
+    if (idx === -1) return;
 
-    const updateProfile = ({ name, email, password, dni, address, phone }) => {
-        const users = getUsers();
-        const idx = users.findIndex(u => u.email === user.email);
-        if (idx === -1) return;
-
-        const updated = {
-        ...users[idx],    // conserva role y otros
-            name,
-            email,
-            dni,
-        address,
-        phone,
-        ...(password ? { password } : {}),
+    const updated = {
+      ...users[idx],
+      name,
+      email,
+      dni,
+      address,
+      phone,
+      ...(password ? { password } : {}),
     };
+
     users[idx] = updated;
     setUsers(users);
     setUser(updated);
     setCurrentUser(updated);
-};
+  };
 
-    //cerrar sesión
-    const logout = () => {
+  // Logout
+  const logout = () => {
     setUser(null);
     clearCurrentUser();
-    navigate("/login");//redirige al login al cerrar sesión
-    };
+    navigate("/login");
+  };
 
-    const enrolledCount = useMemo(
-    () => (user ? getEnrolled(user.email).length : 0),
-    [user]
-    );
+  // Cantidad de materias inscriptas
+  const enrolledCount = useMemo(() => (user ? getEnrolled(user.email).length : 0), [user]);
 
-    const value = { user, loading, login, register, updateProfile, logout, enrolledCount };
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const value = { user, loading, login, register, updateProfile, logout, enrolledCount };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-//hook
+
+// Hook para consumir contexto
 export const useAuth = () => useContext(AuthContext);
