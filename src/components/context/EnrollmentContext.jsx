@@ -1,38 +1,45 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthContext";
 import { getEnrolled as storageGet, setEnrolled as storageSet } from "../../utils/storage";
 
 const EnrollmentContext = createContext();
 
+// Clave para guardar materias en localStorage
+const SUBJECTS_KEY = "global_subjects";
 
-//Proximamente con firebase
-const SUBJECTS = [
-  { id: 1, name: 'Matemática Avanzada', schedule: 'Lun-Mié 14:00-16:00', credits: 4 },
-  { id: 2, name: 'Historia Argentina', schedule: 'Mar-Jue 10:00-12:00', credits: 3 },
-  { id: 3, name: 'Física General', schedule: 'Lun-Vie 08:00-10:00', credits: 5 },
-  { id: 4, name: 'Literatura Contemporánea', schedule: 'Mié-Vie 16:00-18:00', credits: 3 },
-  { id: 5, name: 'Química Orgánica', schedule: 'Mar-Jue 14:00-16:00', credits: 4 },
-  { id: 6, name: 'Inglés Intermedio', schedule: 'Lun-Mié-Vie 12:00-13:00', credits: 2 },
-  { id: 7, name: 'Programación I', schedule: 'Mar-Jue 18:00-20:00', credits: 4 },
-  { id: 8, name: 'Filosofía', schedule: 'Vie 14:00-18:00', credits: 3 }
+const INITIAL_SUBJECTS = [
+  { id: 1, name: "Matemática Avanzada", schedule: "Lunes y Miércoles 14:00-16:00", credits: 4 },
+  { id: 2, name: "Historia Argentina", schedule: "Martes y Jueves 10:00-12:00", credits: 3 },
+  { id: 3, name: "Física General", schedule: "Lunes y Viernes 08:00-10:00", credits: 5 },
+  { id: 4, name: "Literatura Contemporánea", schedule: "Miércoles y Viernes 16:00-18:00", credits: 3 },
+  { id: 5, name: "Química Orgánica", schedule: "Martes y Jueves 14:00-16:00", credits: 4 },
+  { id: 6, name: "Inglés Intermedio", schedule: "Miércoles y Viernes 12:00-13:00", credits: 2 },
+  { id: 7, name: "Programación I", schedule: "Martes y Jueves 18:00-20:00", credits: 4 },
+  { id: 8, name: "Filosofía", schedule: "Viernes 14:00-18:00", credits: 3 },
 ];
 
 export function EnrollmentProvider({ children }) {
   const { user } = useAuth();
 
-  // Estado reactivo de materias inscriptas
-  const [enrolled, setEnrolled] = useState([]);
+  // ✅ Cargar materias desde localStorage (o usar las iniciales si no hay nada)
+  const [subjects, setSubjects] = useState(() => {
+    const saved = localStorage.getItem(SUBJECTS_KEY);
+    return saved ? JSON.parse(saved) : INITIAL_SUBJECTS;
+  });
 
-  // Estado de selección temporal en la UI
+  // ✅ Guardar automáticamente en localStorage cuando cambian
+  useEffect(() => {
+    localStorage.setItem(SUBJECTS_KEY, JSON.stringify(subjects));
+  }, [subjects]);
+
+  const [enrolled, setEnrolled] = useState([]);
   const [selected, setSelected] = useState([]);
 
-  // Cargar desde storage cuando haya usuario o cambie
   useEffect(() => {
     if (user) setEnrolled(storageGet(user.email));
     else setEnrolled([]);
   }, [user]);
 
-  // (Opcional) escuchar cambios de storage entre pestañas
   useEffect(() => {
     const onStorage = (e) => {
       if (!user) return;
@@ -46,18 +53,22 @@ export function EnrollmentProvider({ children }) {
 
   const isEnrolled = (id) => enrolled.some((s) => s.id === id);
 
-  const toggleSelect = (id) =>
-    setSelected((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  const toggleSelect = (id) => {
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
 
   const confirm = () => {
     if (!user || selected.length === 0) return [];
-    const additions = SUBJECTS.filter((s) => selected.includes(s.id) && !isEnrolled(s.id));
+    const additions = subjects.filter(
+      (s) => selected.includes(s.id) && !isEnrolled(s.id)
+    );
     if (additions.length === 0) {
       setSelected([]);
       return [];
     }
     const updated = [...enrolled, ...additions];
-    //  Persistir y actualizar estado reactivo
     storageSet(user.email, updated);
     setEnrolled(updated);
     setSelected([]);
@@ -67,13 +78,13 @@ export function EnrollmentProvider({ children }) {
   const cancel = (id) => {
     if (!user) return;
     const updated = enrolled.filter((s) => s.id !== id);
-    // Persistir y actualizar estado reactivo
     storageSet(user.email, updated);
     setEnrolled(updated);
   };
 
   const value = {
-    subjects: SUBJECTS,
+    subjects,
+    setSubjects,
     enrolled,
     isEnrolled,
     selected,
@@ -82,7 +93,11 @@ export function EnrollmentProvider({ children }) {
     cancel,
   };
 
-  return <EnrollmentContext.Provider value={value}>{children}</EnrollmentContext.Provider>;
+  return (
+    <EnrollmentContext.Provider value={value}>
+      {children}
+    </EnrollmentContext.Provider>
+  );
 }
 
 export const useEnrollment = () => useContext(EnrollmentContext);
