@@ -91,6 +91,97 @@ export default function MateriasPreceptor() {
           {showForm ? "Cancelar" : "Agregar Materia"}
         </button>
       </div>
+
+      {showForm && (
+        <form onSubmit={handleSubmit} className="mb-6 bg-gray-100 p-4 rounded">
+          {error && <div className="text-red-500 mb-3">{error}</div>}
+          <div className="grid md:grid-cols-3 gap-4">
+            <input
+              type="text"
+              name="nombre"
+              placeholder="Nombre de la materia"
+              value={formData.nombre}
+              onChange={handleChange}
+              className="p-2 rounded border w-full"
+            />
+            <input
+              type="text"
+              name="dia"
+              placeholder="Día (Lunes, Martes...)"
+              value={formData.dia}
+              onChange={handleChange}
+              className="p-2 rounded border w-full"
+            />
+            <select
+              name="horario"
+              value={formData.horario}
+              onChange={handleChange}
+              className="p-2 rounded border w-full"
+            >
+              <option value="">Seleccionar horario</option>
+              {horariosDisponibles.map((horario) => (
+                <option key={horario} value={horario}>
+                  {horario}
+                </option>
+              ))}
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+          >
+            {isEditing ? "Guardar cambios" : "Agregar Materia"}
+          </button>
+        </form>
+      )}
+
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="border px-4 py-2">Nombre</th>
+            <th className="border px-4 py-2">Día</th>
+            <th className="border px-4 py-2">Horario</th>
+            <th className="border px-4 py-2">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {materias.map((m) => {
+            const nombre = m.nombre || m.name;
+            const dia =
+              m.dia ||
+              (m.schedule?.match(/^[A-Za-zÁÉÍÓÚáéíóúñ\s,]+(?=\s\d)/)?.[0]?.trim() ?? "—");
+            const horario =
+              m.horario ||
+              (m.schedule?.match(/\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}/)?.[0] ?? "—");
+
+            return (
+              <tr key={m.id} className="text-center">
+                <td className="border px-4 py-2">{nombre}</td>
+                <td className="border px-4 py-2">{dia}</td>
+                <td className="border px-4 py-2">{horario}</td>
+                <td className="border px-4 py-2 flex justify-center gap-2">
+                  <button
+                    onClick={() => handleEdit(m)}
+                    className="bg-yellow-400 px-2 py-1 rounded hover:bg-yellow-500 transition"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(m.id)}
+                    className="bg-red-500 px-2 py-1 rounded text-white hover:bg-red-600 transition"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      {materias.length === 0 && (
+        <p className="mt-4 text-gray-500">No hay materias registradas.</p>
+      )}
     </section>
   );
 }
