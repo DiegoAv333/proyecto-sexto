@@ -105,31 +105,27 @@ function App() {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="hero-pattern py-16 md:py-24" id="hero">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:flex lg:items-center lg:justify-between">
-            <div className="lg:w-1/2">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-                Bienvenido a <span className="gradient-text">inscribete YA</span>
-              </h1>
-              <p className="mt-4 text-lg text-gray-600">
-                Tu plataforma académica para inscripciones rápidas y eficientes.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row sm:space-x-4">
-                <Link
-                  to="/login"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-base font-medium shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
-                >
-                  Inscribirme ahora
-                </Link>
-              </div>
-            </div>
-            <div className="mt-10 lg:mt-0 lg:w-1/2">
-              {/* Aquí va tu SVG ilustrativo */}
-            </div>
-          </div>
-        </div>
-      </section>
+   <section className="hero-pattern py-16 md:py-24" id="hero">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col items-center text-center"> 
+      <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
+        Bienvenido a <span className="gradient-text">inscribete YA</span>
+      </h1>
+      <p className="mt-4 text-lg text-gray-600">
+        Tu plataforma académica para inscripciones rápidas y eficientes.
+      </p>
+      <div className="mt-8">
+        <Link
+          to="/login"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-base font-medium shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          Inscribirme ahora
+        </Link>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* SOBRE INSCRIBETE YA */}
       <section className="py-16 bg-white">
