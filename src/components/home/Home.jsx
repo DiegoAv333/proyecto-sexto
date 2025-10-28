@@ -140,7 +140,7 @@ function App() {
               <span className="text-blue-600">YA</span>?
             </h2>
             <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
-              Una plataforma diseñada para simplificar el proceso de inscripción académica.
+              Inscribete YA es una plataforma web diseñada para simplificar y agilizar el proceso de inscripción académica. Permite a estudiantes explorar el catálogo de materias, ver información detallada de cada asignatura y completar inscripciones de forma segura y rápida.
             </p>
           </div>
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
