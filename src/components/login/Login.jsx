@@ -56,12 +56,16 @@ export default function Login() {
       await loginWithGoogle();
       navigate("/dashboard");
     } catch (error) {
-      console.error("Auth error (email):", error.code, error.message);
-      setErr(
-        error.code || "auth/operation-not-allowed"
-          ? "Este método de inicio de sesión no está habilitado en Firebase."
-          : error.message || "No se pudo inciar sesión"
-      );
+      console.error("Auth error (Google):", error);
+      if (error.code) {
+        setErr(
+          error.code === "auth/operation-not-allowed"
+            ? "El inicio de sesión con Google no está habilitado."
+            : "Ocurrió un error inesperado. Por favor, intentá de nuevo."
+        );
+      } else {
+        setErr("No se pudo iniciar sesión con Google. Verificá tu conexión o intentá más tarde.");
+      }
     } finally {
       setSubmitting(false);
     }

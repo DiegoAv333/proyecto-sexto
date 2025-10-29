@@ -1,6 +1,8 @@
 // src/components/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase/config";
 import {
   getUsers,
   setUsers,
@@ -101,7 +103,34 @@ export function AuthProvider({ children }) {
   // Cantidad de materias inscriptas
   const enrolledCount = useMemo(() => (user ? getEnrolled(user.email).length : 0), [user]);
 
-  const value = { user, loading, login, register, updateProfile, logout, enrolledCount };
+  // Login con Google
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    const { user: firebaseUser } = result;
+
+    const users = getUsers() || [];
+    let user = users.find((u) => u.email === firebaseUser.email);
+
+    // Si el usuario no existe, lo creamos
+    if (!user) {
+      user = {
+        name: firebaseUser.displayName,
+        email: firebaseUser.email,
+        role: "frontend", // Rol por defecto
+        // Otros campos que quieras inicializar
+      };
+      users.push(user);
+      setUsers(users);
+    }
+
+    setUser(user);
+    setCurrentUser(user);
+    navigate("/dashboard");
+    return user;
+  };
+
+  const value = { user, loading, login, register, updateProfile, logout, enrolledCount, loginWithGoogle };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
