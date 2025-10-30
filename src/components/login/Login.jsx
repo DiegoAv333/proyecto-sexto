@@ -38,12 +38,25 @@ export default function Login() {
       await login(email, password);
       navigate("/dashboard");
     } catch (error) {
-      console.error("Auth error (email):", error.code, error.message);
-      setErr(
-        error.code || "auth/operation-not-allowed"
-          ? "Este método de inicio de sesión no está habilitado en Firebase."
-          : error.message || "No se pudo inciar sesión"
-      );
+      console.error("Auth error (email):", error);
+      switch (error.code) {
+        case "auth/invalid-email":
+          setErr("El formato del email no es válido.");
+          break;
+        case "auth/user-not-found":
+          setErr("No se encontró un usuario con este email.");
+          break;
+        case "auth/wrong-password":
+        case "auth/invalid-credential":
+          setErr("La contraseña es incorrecta.");
+          break;
+        case "auth/operation-not-allowed":
+          setErr("El inicio de sesión con email y contraseña no está habilitado.");
+          break;
+        default:
+          setErr("Ocurrió un error inesperado. Por favor, intentá de nuevo.");
+          break;
+      }
     } finally {
       setSubmitting(false);
     }
