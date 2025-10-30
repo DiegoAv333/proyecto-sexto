@@ -194,9 +194,13 @@ function App() {
             No pierdas tiempo y asegura tu lugar.
           </p>
           <div className="mt-8 flex justify-center">
-            <button className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-md text-lg font-medium shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+           
+            <Link
+            to="/register"><button
+            className="bg-white text-blue-600 hover:bg-blue-50 px-8 py-3 rounded-md text-lg font-medium shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
               Comenzar ahora
             </button>
+            </Link>
           </div>
         </div>
       </section>
