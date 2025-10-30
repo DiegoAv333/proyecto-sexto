@@ -2,7 +2,6 @@ import React from 'react';
 import './Home.css';
 import { Link } from 'react-router-dom';
 
-// Componente para las tarjetas de materias
 const CourseCard = ({ category, code, title, description, schedule }) => (
   <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300">
     <div className="h-3 bg-blue-600"></div>
@@ -126,7 +125,7 @@ function App() {
               </div>
             </div>
             <div className="mt-10 lg:mt-0 lg:w-1/2">
-              {/* Aquí va tu SVG ilustrativo */}
+              {}
             </div>
           </div>
         </div>
@@ -145,7 +144,6 @@ function App() {
             </p>
           </div>
           <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {/* Aquí van las tarjetas de beneficios */}
           </div>
         </div>
       </section>
@@ -166,9 +164,9 @@ function App() {
         { nombre: "Camilo Arce", desc: "Desarrollador Frontend y coordinador del proyecto.", emoji: "💻" },
         { nombre: "Antonella Sanchez", desc: "Diseñadora UX/UI responsable de la experiencia visual.", emoji: "🎨" },
         { nombre: "Diego Aviléz", desc: "Encargado de la base de datos y lógica del servidor.", emoji: "🗄️" },
-        { nombre: "Lucía Muñoz", desc: "Gestión de contenidos y documentación técnica.", emoji: "📝" },
+        { nombre: "Constanza Falleti", desc: "Gestión de contenidos y documentación técnica.", emoji: "📝" },
         { nombre: "Máximo Retamal", desc: "QA Tester y encargado de control de calidad.", emoji: "🔍" },
-        { nombre: "Constanza Falleti", desc: "Soporte técnico y despliegue del proyecto.", emoji: "🛠️" },
+        { nombre: "Lucía Muñoz", desc: "Soporte técnico y despliegue del proyecto.", emoji: "🛠️" },
         { nombre: "Joaquín Aviléz", desc: "Desarrollador Backend y mantenimiento del sistema.", emoji: "⚙️" },
       ].map((persona, index) => (
         <div
