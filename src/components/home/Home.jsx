@@ -79,11 +79,12 @@ function App() {
                   Inicio
                 </button>
                 <button
-                  onClick={(e) => handleScroll(e, 'materias')}
+                  onClick={(e) => handleScroll(e, 'sobreNosotros')}
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium"
                 >
-                  Materias
+                  Sobre Nosotros
                 </button>
+
                 <button
                   onClick={(e) => handleScroll(e, 'masInfo')}
                   className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium"
@@ -149,41 +150,43 @@ function App() {
         </div>
       </section>
 
-      {/* MATERIAS DISPONIBLES */}
-      <section className="py-16 bg-gray-50" id="materias">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-800">Materias Disponibles</h2>
-            <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
-              Explora nuestra amplia oferta académica.
-            </p>
-          </div>
+{/* SOBRE NOSOTROS */}
+<section className="py-16 bg-gray-50" id="sobreNosotros">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center">
+      <h2 className="text-3xl font-bold text-gray-800">Sobre Nosotros</h2>
+      <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600">
+        Somos un equipo de estudiantes y desarrolladores apasionados por mejorar la gestión académica.
+        Nuestro objetivo es ofrecer una plataforma moderna, eficiente y accesible para todos.
+      </p>
+    </div>
 
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <CourseCard
-              category="Ciencias"
-              code="MAT101"
-              title="Cálculo Diferencial"
-              description="Fundamentos del cálculo, límites, derivadas y aplicaciones."
-              schedule="Lunes y Miércoles"
-            />
-            <CourseCard
-              category="Humanidades"
-              code="LIT205"
-              title="Literatura Contemporánea"
-              description="Análisis de obras literarias del siglo XX y XXI."
-              schedule="Martes y Jueves"
-            />
-            <CourseCard
-              category="Tecnología"
-              code="CS150"
-              title="Programación Avanzada"
-              description="Estructuras de datos, algoritmos y paradigmas de programación."
-              schedule="Lunes, Miércoles y Viernes"
-            />
+    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
+      {[
+        { nombre: "Camilo Arce", desc: "Desarrollador Frontend y coordinador del proyecto.", emoji: "💻" },
+        { nombre: "Lucía Fernández", desc: "Diseñadora UX/UI responsable de la experiencia visual.", emoji: "🎨" },
+        { nombre: "Julián Pérez", desc: "Encargado de la base de datos y lógica del servidor.", emoji: "🗄️" },
+        { nombre: "Valentina Gómez", desc: "Gestión de contenidos y documentación técnica.", emoji: "📝" },
+        { nombre: "Martín López", desc: "QA Tester y encargado de control de calidad.", emoji: "🔍" },
+        { nombre: "Sofía Herrera", desc: "Soporte técnico y despliegue del proyecto.", emoji: "🛠️" },
+        { nombre: "Diego Ramos", desc: "Desarrollador Backend y mantenimiento del sistema.", emoji: "⚙️" },
+      ].map((persona, index) => (
+        <div
+          key={index}
+          className="bg-white rounded-xl shadow-sm hover:shadow-md transition duration-300 w-60 text-center p-6"
+        >
+          <div className="h-20 w-20 mx-auto flex items-center justify-center rounded-full bg-blue-50 text-4xl mb-4">
+            {persona.emoji}
           </div>
+          <h3 className="text-lg font-semibold text-gray-800">{persona.nombre}</h3>
+          <p className="mt-2 text-gray-600 text-sm">{persona.desc}</p>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
+
+
 
       {/* CALL TO ACTION */}
       <section className="py-16 bg-gradient-to-r from-blue-800 to-blue-600">

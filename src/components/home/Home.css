@@ -18,3 +18,27 @@ body {
     -webkit-background-clip: text; 
     -webkit-text-fill-color: transparent; 
 }
+#sobreNosotros {
+  background-color: #f9fafb;
+}
+
+#sobreNosotros h2 {
+  color: #1e3a8a;
+}
+
+#sobreNosotros .grid {
+  gap: 1.5rem; /* tarjetas más juntas */
+}
+
+#sobreNosotros .rounded-xl {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#sobreNosotros .rounded-xl:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+#sobreNosotros p {
+  color: #374151;
+}
