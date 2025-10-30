@@ -34,10 +34,6 @@ export default function Detalle() {
       <h1 className="text-2xl font-bold mb-4">{materia.name}</h1>
       <p className="mb-2">📅 Horario: {materia.schedule}</p>
       <p className="mb-2">📚 Créditos: {materia.credits}</p>
-      {materia.capacity && <p className="mb-2">Cupo máximo: {materia.capacity}</p>}
-      {materia.enrolled && (
-        <p className="mb-4">Inscritos: {materia.enrolled.length}</p>
-      )}
 
       <button
         onClick={() => navigate("/enrollment")}
