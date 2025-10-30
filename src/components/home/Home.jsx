@@ -164,12 +164,12 @@ function App() {
     <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
       {[
         { nombre: "Camilo Arce", desc: "Desarrollador Frontend y coordinador del proyecto.", emoji: "💻" },
-        { nombre: "Lucía Fernández", desc: "Diseñadora UX/UI responsable de la experiencia visual.", emoji: "🎨" },
-        { nombre: "Julián Pérez", desc: "Encargado de la base de datos y lógica del servidor.", emoji: "🗄️" },
-        { nombre: "Valentina Gómez", desc: "Gestión de contenidos y documentación técnica.", emoji: "📝" },
-        { nombre: "Martín López", desc: "QA Tester y encargado de control de calidad.", emoji: "🔍" },
-        { nombre: "Sofía Herrera", desc: "Soporte técnico y despliegue del proyecto.", emoji: "🛠️" },
-        { nombre: "Diego Ramos", desc: "Desarrollador Backend y mantenimiento del sistema.", emoji: "⚙️" },
+        { nombre: "Antonella Sanchez", desc: "Diseñadora UX/UI responsable de la experiencia visual.", emoji: "🎨" },
+        { nombre: "Diego Aviléz", desc: "Encargado de la base de datos y lógica del servidor.", emoji: "🗄️" },
+        { nombre: "Lucía Muñoz", desc: "Gestión de contenidos y documentación técnica.", emoji: "📝" },
+        { nombre: "Máximo Retamal", desc: "QA Tester y encargado de control de calidad.", emoji: "🔍" },
+        { nombre: "Constanza Falleti", desc: "Soporte técnico y despliegue del proyecto.", emoji: "🛠️" },
+        { nombre: "Joaquín Aviléz", desc: "Desarrollador Backend y mantenimiento del sistema.", emoji: "⚙️" },
       ].map((persona, index) => (
         <div
           key={index}
