@@ -20,6 +20,7 @@ body {
     background-clip: text; 
     -webkit-text-fill-color: transparent; 
 }
+/* === SECCIÓN SOBRE NOSOTROS === */
 #sobreNosotros {
   background-color: #f9fafb;
 }
@@ -29,18 +30,54 @@ body {
 }
 
 #sobreNosotros .grid {
-  gap: 1.5rem;
+  gap: 1rem; /* antes era 1.5 o más */
 }
 
+#sobreNosotros .card,
 #sobreNosotros .rounded-xl {
+  width: 18rem; /* agranda las tarjetas */
+  padding: 2rem; /* más aire interno */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+#sobreNosotros .card:hover,
 #sobreNosotros .rounded-xl:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-#sobreNosotros p {
-  color: #374151;
+#sobreNosotros .rounded-full {
+  height: 6rem;
+  width: 6rem;
+  font-size: 2.5rem;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-12px);
+  }
+  60% {
+    transform: translateY(-6px);
+  }
+}
+
+#sobreNosotros .rounded-full:hover {
+  animation: bounce 0.8s;
+}
+
+#sobreNosotros .card,
+#sobreNosotros .rounded-xl {
+  width: 18rem;
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.15);
+}
+
+#sobreNosotros .card:hover,
+#sobreNosotros .rounded-xl:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
 }
