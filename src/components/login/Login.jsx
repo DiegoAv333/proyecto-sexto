@@ -38,13 +38,10 @@ export default function Login() {
       await login(email, password);
       navigate("/dashboard");
     } catch (error) {
-      console.error("Auth error (email):", error.code, error.message);
-      setErr(
-        error.code || "auth/operation-not-allowed"
-          ? "Este método de inicio de sesión no está habilitado en Firebase."
-          : error.message || "No se pudo inciar sesión"
-      );
-    } finally {
+    console.error("Auth error:", error);
+    setErr("Error al iniciar sesión. Verificá tus datos o intentá de nuevo.");
+    }
+    finally {
       setSubmitting(false);
     }
   };
