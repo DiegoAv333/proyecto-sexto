@@ -80,13 +80,21 @@ function Shell() {
           </Route>
         </Route>
 
-        {/* --- RUTA BACKEND (solo admin) --- */}
-        <Route element={<ProtectedRoute roles={["backend"]} />}>
-          <Route
-            path="/admin"
-            element={<div className="p-8">Panel Backend (solo rol backend)</div>}
-          />
-        </Route>
+        {/* --- RUTA BACKEND / ADMIN --- */}
+          <Route element={<ProtectedRoute roles={["admin", "backend"]} />}>
+            <Route
+              path="/admin"
+              element={
+                <div className="p-8 text-center">
+                  <h1 className="text-3xl font-bold mb-4 text-dark-gray">Panel Administrador</h1>
+                  <p className="text-gray-600">
+                    Bienvenido <strong>Administrador</strong>.  
+                    Desde aquí podrás gestionar usuarios, materias y preceptores.
+                  </p>
+                </div>
+              }
+            />
+          </Route>
 
         {/* --- Fallback --- */}
         <Route path="*" element={<Navigate to="/" replace />} />
