@@ -2,17 +2,17 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../components/context/AuthContext";
 
 export default function ProtectedRoute({ roles }) {
-    const { user, loading } = useAuth();
+  const { user, loading } = useAuth();
 
-    // Mientras carga el estado del usuario
-    if (loading) return <p>Cargando...</p>;
-    // Si no hay usuario logueado, redirigir al login
-    if (!user) return <Navigate to="/login" replace />;
+  if (loading) return <p className="p-6 text-center">Cargando...</p>;
 
-  // Si se especifican roles, validar
-    if (roles && roles.length && !roles.includes(user.role || "frontend")) {
-    return <Navigate to="/unauthorized" replace />;
-    }
+  // Si no hay sesión
+  if (!user) return <Navigate to="/login" replace />;
 
-    return <Outlet />;
+  // Si hay restricción por rol
+  if (roles && !roles.includes(user.role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Outlet />;
 }
