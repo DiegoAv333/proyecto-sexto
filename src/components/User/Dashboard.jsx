@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useEnrollment } from "../context/EnrollmentContext";
 import { usePreceptor } from "../context/PreceptorContext";
 import { useNavigate } from "react-router-dom";
+import AdminPanel from "../Admin/AdminPanel";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -10,26 +11,27 @@ export default function Dashboard() {
   const { enrolled } = useEnrollment();
   const { materias, alumnos, mensajes } = usePreceptor();
 
-  const enrolledCount = user?.role === "frontend" || user?.role === "backend"
-    ? enrolled.length
-    : 0;
+ const enrolledCount = ["alumno", "frontend", "backend"].includes(user?.role)
+  ? enrolled.length
+  : 0;
 
   return (
     <section className={`max-w-6xl mx-auto px-4 py-8 ${anim.fadeIn}`}>
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-dark-gray mb-2">Inicio</h1>
         <p className="text-gray-600 text-lg">
-          ¡Bienvenido {user?.name}!
-          {user?.role === "backend" && (
+          ¡Bienvenido/a {user?.name}!
+          {["admin", "backend"].includes(user?.role) && (
             <span className="ml-2 text-sm bg-yellow-200 px-2 py-1 rounded font-semibold text-yellow-800">
               Modo Administrador
             </span>
           )}
+
         </p>
       </header>
 
-      {/* --- Vista Alumno --- */}
-      {(user?.role === "frontend" || user?.role === "backend") && (
+        {/* --- Vista Alumno --- */}
+        {["frontend", "backend", "admin"].includes(user?.role) && (
         <>
           <div className="grid md:grid-cols-3 gap-6" role="list">
             <button
@@ -92,8 +94,8 @@ export default function Dashboard() {
         </>
       )}
 
-      {/* --- Vista Preceptor --- */}
-      {(user?.role === "preceptor" || user?.role === "backend") && (
+        {/* --- Vista Preceptor --- */}
+        {["preceptor", "backend", "admin"].includes(user?.role) && (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
           <button
             onClick={() => navigate("/preceptor/materias")}
@@ -148,6 +150,10 @@ export default function Dashboard() {
           </button>
         </div>
       )}
+
+      {/* --- Vista Admin --- */}
+      {user?.role === "admin" && <AdminPanel />}
+
     </section>
   );
 }
