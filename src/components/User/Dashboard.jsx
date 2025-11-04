@@ -3,17 +3,19 @@ import { useAuth } from "../context/AuthContext";
 import { useEnrollment } from "../context/EnrollmentContext";
 import { usePreceptor } from "../context/PreceptorContext";
 import { useNavigate } from "react-router-dom";
-import AdminPanel from "../Admin/AdminPanel";
+import AdminPanel from "../Admin/AdminPanel";  // import nuevo
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { enrolled } = useEnrollment();
   const { materias, alumnos, mensajes } = usePreceptor();
 
- const enrolledCount = ["alumno", "frontend", "backend"].includes(user?.role)
-  ? enrolled.length
-  : 0;
+  if (loading) return <p className="p-6 text-center">Cargando...</p>;
+  if (!user) return <p className="p-6 text-center text-red-500">No se encontró sesión activa.</p>;
+
+  // ✅ Contador de materias inscriptas (funciona para alumno y admin)
+  const enrolledCount = enrolled?.length || 0;
 
   return (
     <section className={`max-w-6xl mx-auto px-4 py-8 ${anim.fadeIn}`}>
@@ -21,23 +23,21 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold text-dark-gray mb-2">Inicio</h1>
         <p className="text-gray-600 text-lg">
           ¡Bienvenido/a {user?.name}!
-          {["admin", "backend"].includes(user?.role) && (
+           {user?.role === "admin" && (
             <span className="ml-2 text-sm bg-yellow-200 px-2 py-1 rounded font-semibold text-yellow-800">
               Modo Administrador
             </span>
           )}
-
         </p>
       </header>
 
-        {/* --- Vista Alumno --- */}
-        {["frontend", "backend", "admin"].includes(user?.role) && (
+      {/* --- Vista Alumno (visible también para admin) --- */}
+      {(user?.role === "alumno" || user?.role === "admin") && (
         <>
           <div className="grid md:grid-cols-3 gap-6" role="list">
             <button
               onClick={() => navigate("/enrollment")}
               className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow text-left"
-              role="listitem"
             >
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-green-100 rounded-xl grid place-items-center mr-4">
@@ -51,7 +51,6 @@ export default function Dashboard() {
             <button
               onClick={() => navigate("/enrolled")}
               className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow text-left"
-              role="listitem"
             >
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-blue-100 rounded-xl grid place-items-center mr-4">
@@ -65,7 +64,6 @@ export default function Dashboard() {
             <button
               onClick={() => navigate("/profile")}
               className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow text-left"
-              role="listitem"
             >
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-purple-100 rounded-xl grid place-items-center mr-4">
@@ -77,7 +75,7 @@ export default function Dashboard() {
             </button>
           </div>
 
-          {/* Resumen rápido alumno */}
+          {/* --- Resumen rápido --- */}
           <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
             <h3 className="text-xl font-semibold text-dark-gray mb-4">Resumen rápido</h3>
             <div className="grid md:grid-cols-2 gap-4">
@@ -94,8 +92,8 @@ export default function Dashboard() {
         </>
       )}
 
-        {/* --- Vista Preceptor --- */}
-        {["preceptor", "backend", "admin"].includes(user?.role) && (
+      {/* --- Vista Preceptor (visible también para admin) --- */}
+      {(user?.role === "preceptor" || user?.role === "admin") && (
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
           <button
             onClick={() => navigate("/preceptor/materias")}
@@ -150,10 +148,13 @@ export default function Dashboard() {
           </button>
         </div>
       )}
-
-      {/* --- Vista Admin --- */}
-      {user?.role === "admin" && <AdminPanel />}
-
+       {/* --- Vista Admin (gestión de usuarios) --- */}
+      {user?.role === "admin" && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-semibold mb-4">Gestión de Usuarios</h2>
+          <AdminPanel />
+        </div>
+      )}
     </section>
   );
 }
