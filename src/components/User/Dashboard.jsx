@@ -89,6 +89,22 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+
+          {/* --- Mensajes para Alumnos --- */}
+          <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
+            <h3 className="text-xl font-semibold text-dark-gray mb-4">Comunicados</h3>
+            {mensajes.length > 0 ? (
+              <ul className="space-y-3">
+                {mensajes.map((m) => (
+                  <li key={m.id} className="border p-3 rounded bg-gray-50">
+                    <strong>{m.remitente}:</strong> {m.texto}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-gray-600">No hay comunicados para mostrar.</p>
+            )}
+          </div>
         </>
       )}
 

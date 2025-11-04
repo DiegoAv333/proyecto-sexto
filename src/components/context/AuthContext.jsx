@@ -49,25 +49,15 @@ export function AuthProvider({ children }) {
     for (const u of defaultUsers) {
       try {
         const methods = await fetchSignInMethodsForEmail(auth, u.email);
-        let userAuth;
-
-        // 🔸 Crear en Auth si no existe
+        
         if (methods.length === 0) {
           const cred = await createUserWithEmailAndPassword(auth, u.email, u.password);
-          userAuth = cred.user;
+          const userAuth = cred.user;
           console.log(`✅ Usuario Auth creado: ${u.email}`);
-        } else {
-          console.log(`ℹ️ Usuario Auth ya existente: ${u.email}`);
-        }
 
-        // 🔸 Crear en Firestore si no existe
-        const uid = userAuth ? userAuth.uid : u.email;
-        const userRef = doc(db, "usuarios", uid);
-        const snap = await getDoc(userRef);
-
-        if (!snap.exists()) {
+          const userRef = doc(db, "usuarios", userAuth.uid);
           await setDoc(userRef, {
-            uid,
+            uid: userAuth.uid,
             email: u.email,
             name: u.name,
             role: u.role,
@@ -75,7 +65,7 @@ export function AuthProvider({ children }) {
           });
           console.log(`✅ Usuario Firestore agregado: ${u.email}`);
         } else {
-          console.log(`ℹ️ Usuario Firestore ya existente: ${u.email}`);
+          console.log(`ℹ️ Usuario ya existente: ${u.email}`);
         }
       } catch (err) {
         console.error(`❌ Error creando seed ${u.email}:`, err.message);

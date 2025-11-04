@@ -21,7 +21,7 @@ export default function Navbar() {
             className="flex items-center space-x-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-strong-blue rounded-md"
             aria-label="Ir al inicio"
             >
-            <svg class="h-8 w-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="h-8 w-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
             </svg>
             <span className="font-bold text-dark-gray text-xl">Inscribite YA</span>
