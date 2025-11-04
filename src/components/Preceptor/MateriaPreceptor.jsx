@@ -1,187 +1,177 @@
-import { useState } from "react";
-import { usePreceptor } from "../context/PreceptorContext";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "../../firebase/config";
 
-export default function MateriasPreceptor() {
+export default function MateriaPreceptor() {
   const navigate = useNavigate();
-  const { materias, agregarMateria, eliminarMateria, setMaterias } = usePreceptor();
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ id: null, nombre: "", dia: "", horario: "" });
-  const [isEditing, setIsEditing] = useState(false);
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [materias, setMaterias] = useState([]);
+  const [form, setForm] = useState({ name: "", day: "", time: "" });
+  const [editando, setEditando] = useState(null);
 
-  const horariosDisponibles = [
-    "8:00 a 9:20", "9:20 a 10:40", "10:40 a 12:20",
-    "13:30 a 14:50", "14:50 a 16:10", "16:10 a 17:50",
-    "18:00 a 19:20", "19:20 a 20:40", "20:40 a 22:20"
-  ];
+  // 🔹 Escucha en tiempo real
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "materias"), (snap) => {
+      const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      setMaterias(data);
+    });
+    return unsub;
+  }, []);
 
-  const validateTime = (time) => horariosDisponibles.includes(time);
-
+  // 🔹 Manejo de inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!formData.nombre || !formData.dia || !formData.horario) {
-      setError("Completa todos los campos");
-      return;
-    }
-    if (!validateTime(formData.horario)) {
-      setError("Horario no válido. Seleccione un horario de la lista.");
-      return;
-    }
+  // 🔹 Agregar nueva materia
+  const handleAdd = async () => {
+    if (!form.name || !form.day || !form.time)
+      return alert("Completa todos los campos antes de guardar.");
 
-    setError("");
+    await addDoc(collection(db, "materias"), {
+      name: form.name,
+      day: form.day,
+      time: form.time,
+    });
 
-    if (isEditing) {
-      const updated = materias.map((m) => (m.id === formData.id ? formData : m));
-      setMaterias(updated);
-      setSuccessMessage("Materia actualizada exitosamente");
-    } else {
-      agregarMateria({ ...formData, id: Date.now() });
-      setSuccessMessage("Materia agregada exitosamente");
-    }
-
-    setFormData({ id: null, nombre: "", dia: "", horario: "" });
-    setShowForm(false);
-    setIsEditing(false);
-    setTimeout(() => setSuccessMessage(""), 3000);
+    setForm({ name: "", day: "", time: "" });
   };
 
+  // 🔹 Guardar edición
+  const handleSave = async (id) => {
+    const ref = doc(db, "materias", id);
+    await updateDoc(ref, {
+      name: form.name,
+      day: form.day,
+      time: form.time,
+    });
+    setEditando(null);
+    setForm({ name: "", day: "", time: "" });
+  };
+
+  // 🔹 Eliminar materia
+  const handleDelete = async (id) => {
+    if (window.confirm("¿Eliminar esta materia?")) {
+      await deleteDoc(doc(db, "materias", id));
+    }
+  };
+
+  // 🔹 Iniciar edición
   const handleEdit = (materia) => {
-    setFormData(materia);
-    setIsEditing(true);
-    setShowForm(true);
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm("¿Eliminar esta materia?")) eliminarMateria(id);
+    setEditando(materia.id);
+    setForm({
+      name: materia.name,
+      day: materia.day,
+      time: materia.time,
+    });
   };
 
   return (
-    <section className="max-w-5xl mx-auto p-6">
-      {successMessage && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-          {successMessage}
-        </div>
-      )}
-
+    <section className="p-8 bg-light-blue min-h-screen">
+      {/* 🔙 Botón Volver */}
       <button
-        type="button"
         onClick={() => navigate("/dashboard")}
-        className="text-strong-blue hover:underline"
+        className="text-blue-600 hover:underline mb-4 flex items-center"
       >
-        ← Volver al inicio
+        ← Volver al Inicio
       </button>
 
-      <div className="flex justify-between items-center mb-4 mt-6">
-        <h2 className="text-2xl font-bold text-dark-gray">Gestión de Materias</h2>
+      <h1 className="text-3xl font-bold text-dark-gray mb-6">
+        Gestión de Materias
+      </h1>
+
+      {/* Formulario */}
+      <div className="bg-white p-6 rounded-2xl shadow-lg mb-10">
+        <h2 className="text-xl font-semibold mb-4">
+          {editando ? "Editar Materia" : "Agregar Nueva Materia"}
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-4 mb-4">
+          <input
+            name="name"
+            placeholder="Nombre de la materia"
+            className="border p-2 rounded-lg"
+            value={form.name}
+            onChange={handleChange}
+          />
+          <input
+            name="day"
+            placeholder="Días (Ej: Lunes y Miércoles)"
+            className="border p-2 rounded-lg"
+            value={form.day}
+            onChange={handleChange}
+          />
+          <input
+            name="time"
+            placeholder="Horario (Ej: 14:00 a 16:00)"
+            className="border p-2 rounded-lg"
+            value={form.time}
+            onChange={handleChange}
+          />
+        </div>
+
         <button
-          onClick={() => {
-            setShowForm(!showForm);
-            setIsEditing(false);
-            setFormData({ id: null, nombre: "", dia: "", horario: "" });
-          }}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          onClick={() => (editando ? handleSave(editando) : handleAdd())}
+          className="text-white bg-strong-blue px-5 py-2 rounded-lg hover:bg-blue-700 transition"
         >
-          {showForm ? "Cancelar" : "Agregar Materia"}
+          {editando ? "Guardar cambios" : "Agregar materia"}
         </button>
+
+        {editando && (
+          <button
+            onClick={() => {
+              setEditando(null);
+              setForm({ name: "", day: "", time: "" });
+            }}
+            className="ml-3 text-gray-600 hover:text-gray-900"
+          >
+            Cancelar
+          </button>
+        )}
       </div>
 
-      {showForm && (
-        <form onSubmit={handleSubmit} className="mb-6 bg-gray-100 p-4 rounded">
-          {error && <div className="text-red-500 mb-3">{error}</div>}
-          <div className="grid md:grid-cols-3 gap-4">
-            <input
-              type="text"
-              name="nombre"
-              placeholder="Nombre de la materia"
-              value={formData.nombre}
-              onChange={handleChange}
-              className="p-2 rounded border w-full"
-            />
-            <input
-              type="text"
-              name="dia"
-              placeholder="Día (Lunes, Martes...)"
-              value={formData.dia}
-              onChange={handleChange}
-              className="p-2 rounded border w-full"
-            />
-            <select
-              name="horario"
-              value={formData.horario}
-              onChange={handleChange}
-              className="p-2 rounded border w-full"
-            >
-              <option value="">Seleccionar horario</option>
-              {horariosDisponibles.map((horario) => (
-                <option key={horario} value={horario}>
-                  {horario}
-                </option>
-              ))}
-            </select>
-          </div>
-          <button
-            type="submit"
-            className="mt-3 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-          >
-            {isEditing ? "Guardar cambios" : "Agregar Materia"}
-          </button>
-        </form>
-      )}
-
-      <table className="w-full border-collapse">
+      {/* Tabla */}
+      <table className="w-full bg-white rounded-2xl shadow-lg">
         <thead>
-          <tr className="bg-gray-200">
-            <th className="border px-4 py-2">Nombre</th>
-            <th className="border px-4 py-2">Día</th>
-            <th className="border px-4 py-2">Horario</th>
-            <th className="border px-4 py-2">Acciones</th>
+          <tr className="bg-blue-50 text-left">
+            <th className="p-3">Nombre</th>
+            <th className="p-3">Días</th>
+            <th className="p-3">Horario</th>
+            <th className="p-3 text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {materias.map((m) => {
-            const nombre = m.nombre || m.name;
-            const dia =
-              m.dia ||
-              (m.schedule?.match(/^[A-Za-zÁÉÍÓÚáéíóúñ\s,]+(?=\s\d)/)?.[0]?.trim() ?? "—");
-            const horario =
-              m.horario ||
-              (m.schedule?.match(/\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}/)?.[0] ?? "—");
-
-            return (
-              <tr key={m.id} className="text-center">
-                <td className="border px-4 py-2">{nombre}</td>
-                <td className="border px-4 py-2">{dia}</td>
-                <td className="border px-4 py-2">{horario}</td>
-                <td className="border px-4 py-2 flex justify-center gap-2">
-                  <button
-                    onClick={() => handleEdit(m)}
-                    className="bg-yellow-400 px-2 py-1 rounded hover:bg-yellow-500 transition"
-                  >
-                    Editar
-                  </button>
-                  <button
-                    onClick={() => handleDelete(m.id)}
-                    className="bg-red-500 px-2 py-1 rounded text-white hover:bg-red-600 transition"
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+          {materias.map((m) => (
+            <tr key={m.id} className="border-t hover:bg-blue-50">
+              <td className="p-3">{m.name}</td>
+              <td className="p-3">{m.day}</td>
+              <td className="p-3">{m.time}</td>
+              <td className="p-3 text-center space-x-2">
+                <button
+                  onClick={() => handleEdit(m)}
+                  className="bg-yellow-400 px-3 py-1 rounded-lg text-white hover:bg-yellow-500"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={() => handleDelete(m.id)}
+                  className="bg-red-500 px-3 py-1 rounded-lg text-white hover:bg-red-600"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-
-      {materias.length === 0 && (
-        <p className="mt-4 text-gray-500">No hay materias registradas.</p>
-      )}
     </section>
   );
 }
