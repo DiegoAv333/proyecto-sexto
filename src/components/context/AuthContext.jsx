@@ -1,3 +1,4 @@
+// src/components/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,7 +15,10 @@ import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("currentUser");
+    return saved ? JSON.parse(saved) : null;
+  });
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -25,7 +29,7 @@ export function AuthProvider({ children }) {
     else navigate("/dashboard");
   };
 
-  // 🔹 Crear usuarios semilla en Auth y Firestore
+  // 🔹 Crear usuarios semilla (admin + preceptor)
   const seedDefaultUsers = async () => {
     const defaultUsers = [
       {
@@ -44,12 +48,11 @@ export function AuthProvider({ children }) {
 
     for (const u of defaultUsers) {
       try {
-        // 🔸 1. Verificar si existe en Authentication
         const methods = await fetchSignInMethodsForEmail(auth, u.email);
         let userAuth;
 
+        // 🔸 Crear en Auth si no existe
         if (methods.length === 0) {
-          // No existe → crear usuario en Auth
           const cred = await createUserWithEmailAndPassword(auth, u.email, u.password);
           userAuth = cred.user;
           console.log(`✅ Usuario Auth creado: ${u.email}`);
@@ -57,8 +60,8 @@ export function AuthProvider({ children }) {
           console.log(`ℹ️ Usuario Auth ya existente: ${u.email}`);
         }
 
-        // 🔸 2. Verificar si existe en Firestore
-        const uid = userAuth ? userAuth.uid : u.email; // fallback si ya existía
+        // 🔸 Crear en Firestore si no existe
+        const uid = userAuth ? userAuth.uid : u.email;
         const userRef = doc(db, "usuarios", uid);
         const snap = await getDoc(userRef);
 
@@ -80,34 +83,38 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // 🔹 Escucha global de sesión y carga inicial
+  // 🔹 Escucha global de sesión
   useEffect(() => {
     const init = async () => {
-      await seedDefaultUsers(); // crear semillas antes de continuar
+      await seedDefaultUsers(); // crea semillas antes de escuchar sesión
 
       const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
         if (firebaseUser) {
           const ref = doc(db, "usuarios", firebaseUser.uid);
           const snap = await getDoc(ref);
 
+          let userData;
           if (snap.exists()) {
-            const userData = { uid: firebaseUser.uid, ...snap.data() };
-            setUser(userData);
+            userData = { uid: firebaseUser.uid, ...snap.data() };
           } else {
-            // Si no existe el documento, lo crea como alumno por defecto
-            const newUser = {
+            // crea por defecto si no existe
+            userData = {
               uid: firebaseUser.uid,
               name: firebaseUser.displayName || firebaseUser.email.split("@")[0],
               email: firebaseUser.email,
               role: "alumno",
               createdAt: serverTimestamp(),
             };
-            await setDoc(ref, newUser);
-            setUser(newUser);
+            await setDoc(ref, userData);
           }
+
+          setUser(userData);
+          localStorage.setItem("currentUser", JSON.stringify(userData));
         } else {
           setUser(null);
+          localStorage.removeItem("currentUser");
         }
+
         setLoading(false);
       });
 
@@ -117,23 +124,23 @@ export function AuthProvider({ children }) {
     init();
   }, []);
 
-  // 🔹 Registro nuevo
-const register = async (name, email, password) => {
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
-  const newUser = {
-    uid: cred.user.uid,
-    name,
-    email,
-    role: "alumno", // 🔹 Rol por defecto
-    createdAt: serverTimestamp(),
+  // 🔹 Registro nuevo (alumno)
+  const register = async (name, email, password) => {
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const newUser = {
+      uid: cred.user.uid,
+      name,
+      email,
+      role: "alumno",
+      createdAt: serverTimestamp(),
+    };
+    await setDoc(doc(db, "usuarios", cred.user.uid), newUser);
+    setUser(newUser);
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
+    redirectByRole(newUser.role);
   };
-  await setDoc(doc(db, "usuarios", cred.user.uid), newUser);
-  setUser(newUser);
-  redirectByRole(newUser.role);
-};
 
-
-  // 🔹 Login
+  // 🔹 Login con email/contraseña
   const login = async (email, password) => {
     const cred = await signInWithEmailAndPassword(auth, email, password);
     const ref = doc(db, "usuarios", cred.user.uid);
@@ -142,6 +149,7 @@ const register = async (name, email, password) => {
     if (snap.exists()) {
       const userData = { uid: cred.user.uid, ...snap.data() };
       setUser(userData);
+      localStorage.setItem("currentUser", JSON.stringify(userData));
       redirectByRole(userData.role);
     } else {
       throw new Error("Usuario no encontrado en la base de datos.");
@@ -171,6 +179,7 @@ const register = async (name, email, password) => {
     }
 
     setUser(userData);
+    localStorage.setItem("currentUser", JSON.stringify(userData));
     redirectByRole(userData.role);
   };
 
@@ -178,6 +187,7 @@ const register = async (name, email, password) => {
   const logout = async () => {
     await signOut(auth);
     setUser(null);
+    localStorage.removeItem("currentUser");
     navigate("/login");
   };
 
