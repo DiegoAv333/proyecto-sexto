@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useEnrollment } from "./EnrollmentContext";
 import { db } from "../../firebase/config";
-import { collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc, serverTimestamp, where } from "firebase/firestore";
 
 const PreceptorContext = createContext();
 export const usePreceptor = () => useContext(PreceptorContext);
@@ -9,14 +9,11 @@ export const usePreceptor = () => useContext(PreceptorContext);
 export function PreceptorProvider({ children }) {
   const { subjects, setSubjects } = useEnrollment();
   const [mensajes, setMensajes] = useState([]);
-  const alumnos = [
-    { id: 1, nombre: "Juan Pérez", email: "juan@mail.com" },
-    { id: 2, nombre: "María López", email: "maria@mail.com" },
-  ];
+  const [alumnos, setAlumnos] = useState([]);
 
   useEffect(() => {
-    const q = query(collection(db, "mensajesPreceptor"), orderBy("timestamp", "asc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    const qMensajes = query(collection(db, "mensajesPreceptor"), orderBy("timestamp", "asc"));
+    const unsubscribeMensajes = onSnapshot(qMensajes, (snapshot) => {
       const mensajesData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -24,7 +21,19 @@ export function PreceptorProvider({ children }) {
       setMensajes(mensajesData);
     });
 
-    return () => unsubscribe();
+    const qAlumnos = query(collection(db, "usuarios"), where("role", "==", "alumno"), orderBy("name", "asc"));
+    const unsubscribeAlumnos = onSnapshot(qAlumnos, (snapshot) => {
+      const alumnosData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAlumnos(alumnosData);
+    });
+
+    return () => {
+      unsubscribeMensajes();
+      unsubscribeAlumnos();
+    };
   }, []);
 
   const agregarMateria = (materia) => {
@@ -62,6 +71,26 @@ export function PreceptorProvider({ children }) {
     }
   };
 
+  const agregarAlumno = async (alumno) => {
+    try {
+      await addDoc(collection(db, "usuarios"), {
+        ...alumno,
+        role: "alumno", // Ensure the role is set to alumno
+        timestamp: serverTimestamp(),
+      });
+    } catch (error) {
+      console.error("Error al agregar alumno: ", error);
+    }
+  };
+
+  const eliminarAlumno = async (id) => {
+    try {
+      await deleteDoc(doc(db, "usuarios", id));
+    } catch (error) {
+      console.error("Error al eliminar alumno: ", error);
+    }
+  };
+
   return (
     <PreceptorContext.Provider
       value={{
@@ -73,6 +102,8 @@ export function PreceptorProvider({ children }) {
         eliminarMateria,
         agregarMensaje,
         eliminarMensaje,
+        agregarAlumno,
+        eliminarAlumno,
       }}
     >
       {children}

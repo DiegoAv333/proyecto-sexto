@@ -40,6 +40,8 @@ export default function MateriaPreceptor() {
       name: form.name,
       day: form.day,
       time: form.time,
+      fechaCreacion: new Date().toLocaleDateString(),
+      horaCreacion: new Date().toLocaleTimeString(),
     });
 
     setForm({ name: "", day: "", time: "" });

@@ -16,7 +16,7 @@ export default function AlumnosPreceptor() {
     if ((!nuevoAlumno.nombre) || (!nuevoAlumno.email))
       return alert("Completa todos los campos");
 
-      agregarAlumno({ id: Date.now(), ...nuevoAlumno });
+      agregarAlumno({ name: nuevoAlumno.nombre, email: nuevoAlumno.email });
       setNuevoAlumno({ nombre: "", email: "" });
   };
 
@@ -71,7 +71,7 @@ return (
         <tbody>
           {alumnos.map((a) => (
             <tr key={a.id} className="text-center">
-              <td className="border px-4 py-2">{a.nombre}</td>
+              <td className="border px-4 py-2">{a.name}</td>
               <td className="border px-4 py-2">{a.email}</td>
               <td className="border px-4 py-2">
                 <button
@@ -91,5 +91,4 @@ return (
       )}
 
     </section>
-  );
-}
+  );}

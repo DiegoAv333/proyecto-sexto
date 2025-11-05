@@ -47,10 +47,15 @@ export function AuthProvider({ children }) {
     ];
 
     for (const u of defaultUsers) {
-      try {
-        const methods = await fetchSignInMethodsForEmail(auth, u.email);
-        
-        if (methods.length === 0) {
+      const userDocRef = doc(db, "usuarios", u.email);
+      const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          console.log(`ℹ️ Usuario Firestore ya existente: ${u.email}`);
+          continue;
+        }
+
+        try {
           const cred = await createUserWithEmailAndPassword(auth, u.email, u.password);
           const userAuth = cred.user;
           console.log(`✅ Usuario Auth creado: ${u.email}`);
@@ -64,13 +69,9 @@ export function AuthProvider({ children }) {
             createdAt: serverTimestamp(),
           });
           console.log(`✅ Usuario Firestore agregado: ${u.email}`);
-        } else {
-          console.log(`ℹ️ Usuario ya existente: ${u.email}`);
+        } catch (err) {
         }
-      } catch (err) {
-        console.error(`❌ Error creando seed ${u.email}:`, err.message);
-      }
-    }
+        }
   };
 
   // 🔹 Escucha global de sesión

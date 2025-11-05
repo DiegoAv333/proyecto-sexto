@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { usePreceptor } from "../context/PreceptorContext";
 import { useNavigate } from "react-router-dom";
+import { useEvents } from "../../hooks/useEvents";
 
 export default function CalendarioPreceptor() {
-  const { mensajes, agregarMensaje } = usePreceptor();
+  const { eventos, agregarEvento, eliminarEvento } = useEvents();
   const [nuevoEvento, setNuevoEvento] = useState({ fecha: "", texto: "" });
   const navigate = useNavigate();
 
@@ -17,10 +17,10 @@ export default function CalendarioPreceptor() {
     if (!nuevoEvento.fecha || !nuevoEvento.texto)
       return alert("Completa todos los campos");
 
-    agregarMensaje({
-      id: Date.now(),
+    agregarEvento({
       remitente: "Preceptor",
-      texto: `${nuevoEvento.fecha}: ${nuevoEvento.texto}`,
+      fecha: nuevoEvento.fecha,
+      texto: nuevoEvento.texto,
     });
     setNuevoEvento({ fecha: "", texto: "" });
   };
@@ -65,14 +65,22 @@ export default function CalendarioPreceptor() {
       </form>
 
       <ul className="space-y-3">
-        {mensajes.map((m) => (
-          <li key={m.id} className="border p-3 rounded bg-white shadow-sm">
-            {m.texto}
+        {eventos.map((e) => (
+          <li key={e.id} className="border p-3 rounded bg-white shadow-sm flex justify-between items-center">
+            <span>
+              <strong>{e.remitente} ({e.fecha}):</strong> {e.texto}
+            </span>
+            <button
+              onClick={() => eliminarEvento(e.id)}
+              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition"
+            >
+              Eliminar
+            </button>
           </li>
         ))}
       </ul>
 
-      {mensajes.length === 0 && (
+      {eventos.length === 0 && (
         <p className="mt-4 text-gray-500">No hay eventos programados.</p>
       )}
     </section>
