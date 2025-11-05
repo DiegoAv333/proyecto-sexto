@@ -12,6 +12,8 @@ export default function SubjectCard({ subject, disabled, checked, onToggle }) {
       <div>
         <h3 className="text-lg font-semibold mb-1">{subject.name}</h3>
         <p className="text-gray-600 mb-2">{subject.schedule}</p>
+        <p className="text-gray-600">Día(s): {subject.day}</p>
+        <p className="text-gray-600">Hora: {subject.time}</p>
         <p className="text-gray-600">{subject.credits} créditos</p>
       </div>
 

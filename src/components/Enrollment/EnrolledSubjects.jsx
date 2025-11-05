@@ -86,8 +86,8 @@ export default function EnrolledSubjects() {
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-xl font-semibold text-dark-gray mb-2">{s.name}</h3>
-                  <p className="text-gray-600 mb-1">📅 {s.schedule}</p>
-                  <p className="text-gray-600">📚 {s.credits} créditos</p>
+                  <p className="text-gray-600">Día(s): {s.day}</p>
+                  <p className="text-gray-600 mb-1">⏰ Hora: {s.time}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">

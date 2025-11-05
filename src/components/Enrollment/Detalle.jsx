@@ -32,7 +32,8 @@ export default function Detalle() {
   return (
     <div className="p-8 max-w-md mx-auto bg-white rounded shadow-lg">
       <h1 className="text-2xl font-bold mb-4">{materia.name}</h1>
-      <p className="mb-2">📅 Horario: {materia.schedule}</p>
+      <p className="mb-2">📅 Fecha: {materia.day}</p>
+      <p className="mb-2">🗓️ Horario: {materia.schedule}</p>
       <p className="mb-2">📚 Créditos: {materia.credits}</p>
 
       <button

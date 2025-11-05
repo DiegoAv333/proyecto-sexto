@@ -2,6 +2,7 @@ import anim from "../../styles/animations.module.css";
 import { useAuth } from "../context/AuthContext";
 import { useEnrollment } from "../context/EnrollmentContext";
 import { usePreceptor } from "../context/PreceptorContext";
+import { useEvents } from "../../hooks/useEvents"; // Import useEvents
 import { useNavigate } from "react-router-dom";
 import AdminPanel from "../Admin/AdminPanel";  // import nuevo
 
@@ -10,9 +11,17 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { enrolled } = useEnrollment();
   const { materias, alumnos, mensajes } = usePreceptor();
+  const { eventos } = useEvents(); // Use useEvents hook
 
   if (loading) return <p className="p-6 text-center">Cargando...</p>;
   if (!user) return <p className="p-6 text-center text-red-500">No se encontró sesión activa.</p>;
+
+  // Combine mensajes and eventos and sort by timestamp
+  const allCommunications = [...mensajes, ...eventos].sort((a, b) => {
+    const timestampA = a.timestamp?.toDate ? a.timestamp.toDate().getTime() : 0;
+    const timestampB = b.timestamp?.toDate ? b.timestamp.toDate().getTime() : 0;
+    return timestampA - timestampB;
+  });
 
   // ✅ Contador de materias inscriptas (funciona para alumno y admin)
   const enrolledCount = enrolled?.length || 0;
@@ -90,19 +99,19 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* --- Mensajes para Alumnos --- */}
+          {/* --- Comunicados y Eventos para Alumnos --- */}
           <div className="mt-8 bg-white rounded-2xl shadow-lg p-6">
-            <h3 className="text-xl font-semibold text-dark-gray mb-4">Comunicados</h3>
-            {mensajes.length > 0 ? (
+            <h3 className="text-xl font-semibold text-dark-gray mb-4">Comunicados y Eventos</h3>
+            {allCommunications.length > 0 ? (
               <ul className="space-y-3">
-                {mensajes.map((m) => (
-                  <li key={m.id} className="border p-3 rounded bg-gray-50">
-                    <strong>{m.remitente}:</strong> {m.texto}
+                {allCommunications.map((item) => (
+                  <li key={item.id} className="border p-3 rounded bg-gray-50">
+                    <strong>{item.remitente} ({item.fecha ? `Evento - ${item.fecha}` : 'Comunicado'}):</strong> {item.texto}
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-gray-600">No hay comunicados para mostrar.</p>
+              <p className="text-gray-600">No hay comunicados ni eventos para mostrar.</p>
             )}
           </div>
         </>
