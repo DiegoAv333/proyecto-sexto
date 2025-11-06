@@ -106,7 +106,7 @@ function Shell() {
 // App principal
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/proyecto-sexto">
     <AuthProvider>
       <EnrollmentProvider>
         <PreceptorProvider>

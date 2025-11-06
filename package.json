@@ -2,7 +2,7 @@
   "name": "proyecto-sexto",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://diegoav333.github.io",
+  "homepage": "https://diegoav333.github.io/proyecto-sexto",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
