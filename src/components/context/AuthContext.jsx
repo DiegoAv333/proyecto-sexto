@@ -8,9 +8,13 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   fetchSignInMethodsForEmail,
+  updateEmail,
+  updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
 } from "firebase/auth";
 import { auth, db } from "../../firebase/config";
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -182,7 +186,33 @@ export function AuthProvider({ children }) {
     navigate("/login");
   };
 
-  const value = { user, loading, register, login, loginWithGoogle, logout };
+  //  Actualizar perfil de usuario
+  const updateProfile = async (data) => {
+    if (!user) return;
+
+    const userRef = doc(db, "usuarios", user.uid);
+    const authUser = auth.currentUser;
+
+    // Actualizar email en Firebase Auth si ha cambiado
+    if (data.email && data.email !== user.email) {
+      await updateEmail(authUser, data.email);
+    }
+
+    // Actualizar contraseña en Firebase Auth si ha cambiado
+    if (data.password) {
+      await updatePassword(authUser, data.password);
+    }
+
+    // Actualizar datos en Firestore
+    const { password, ...rest } = data; // No guardar la contraseña en Firestore
+    await updateDoc(userRef, { ...rest, updatedAt: serverTimestamp() });
+
+    // Actualizar el estado local del usuario
+    setUser((prev) => ({ ...prev, ...rest }));
+    localStorage.setItem("currentUser", JSON.stringify({ ...user, ...rest }));
+  };
+
+  const value = { user, loading, register, login, loginWithGoogle, logout, updateProfile };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
